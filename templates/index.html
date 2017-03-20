@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<meta charset="utf-8">
+<title>rebechar walk</title>
+
+<body>
+    <script src="../static/pixi.js/bin/pixi.js"></script>
+    <script src="../static/scripts/main.js"></script>
+    <script src="../static/scripts/mainChar.js"></script>
+    <script src="../static/scripts/utils.js"></script>
+    <script src="../static/scripts/world.js"></script>
+    <script>
+        var stage = new PIXI.Container(),
+            renderer = PIXI.autoDetectRenderer(600, 600);
+        renderer.backgroundColor = 0xffffff;
+        document.body.appendChild(renderer.view);
+        var entity, nuage, coffre;
+        PIXI.loader
+            .add('../static/images/rebechar.json')
+            .load(onAssetsLoaded);
+
+            
+    </script>
+</body>
+</html>
