@@ -1,5 +1,8 @@
 function onAssetsLoaded() {
 
+            initWorld();
+            initMainChar();
+
             nuage = new PIXI.Sprite(PIXI.Texture.fromFrame('nuage.png'));
 
             nuage.x = -100;
@@ -17,7 +20,8 @@ function onAssetsLoaded() {
 
             //stage.addChild(coffre);
             
-            initMainChar();
+            
+            
             
             renderer.render(stage);
 
@@ -27,9 +31,7 @@ function onAssetsLoaded() {
 
 function animate() {
             //anim.x++;
-            if (entity.getX() > 600) {
-                entity.setX(0);
-            }
+            
             nuage.x += nuage.vx;
             nuage.y += nuage.vy;
             if (nuage.x > 600) {
@@ -41,7 +43,9 @@ function animate() {
             if (nuage.y < 50) {
                 nuage.vy = 0.5;
             }
+
             entity.play();
+            world.play(entity.vx, entity.vy);
             renderer.render(stage);
             requestAnimationFrame(animate);
         }
