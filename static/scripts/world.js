@@ -4,28 +4,37 @@ function initWorld() {
 
 class World {
     constructor(stage) {
-        var farTexture = PIXI.Texture.fromImage("../static/images/far_back.png");
-        var far = new PIXI.extras.TilingSprite(farTexture, 800, 600);
-        far.position.x = 0;
-        far.position.y = 0;
-        far.tilePosition.x = 0;
-        far.tilePosition.y = 0;
-        stage.addChild(far);
+        
+        this.layers = [];
 
-        var midTexture = PIXI.Texture.fromImage("../static/images/medium_back.png");
-        var mid = new PIXI.extras.TilingSprite(midTexture, 800, 300);
-        mid.position.x = 0;
-        mid.position.y = 200;
-        mid.tilePosition.x = 0;
-        mid.tilePosition.y = 0;
-        stage.addChild(mid);
+        this.layers.push(new Layer(stage, 'far_back', {x:800, y:600, posX:0, posY:0}, 0.128));
+        this.layers.push(new Layer(stage, 'medium_back', {x:800, y:200, posX:0, posY:200}, 0.64));
 
-        this.far = far;
-        this.mid = mid;
     }
 
-    play(mainCharSped) {
-        this.far.tilePosition.x -= (mainCharSped * 0.128);
-        this.mid.tilePosition.x -= (mainCharSped * 0.64);
+    play(charAttitude) {
+        for (var layer of this.layers){
+            layer.play(charAttitude);
+        }
+    }
+}
+
+class Layer {
+    constructor(stage, picture, position, offset){
+        var texture = PIXI.Texture.fromImage("../static/images/"+picture+".png");
+        var tile = new PIXI.extras.TilingSprite(texture, position.x, position.y);
+        tile.position.x = position.posX;
+        tile.position.y = position.posY;
+        tile.tilePosition.x = 0;
+        tile.tilePosition.y = 0;
+        stage.addChild(tile);
+        this.tile = tile;
+        this.offset = offset;
+    }
+
+    play(charAttitude){
+        if(charAttitude.locked){
+            this.tile.tilePosition.x -= (charAttitude.speedX * this.offset)
+        }
     }
 }

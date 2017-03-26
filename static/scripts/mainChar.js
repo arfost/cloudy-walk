@@ -68,6 +68,14 @@ class Entity {
             this.animation.y = tmpY;
         }
     }
+
+    getAttitude(){
+        return {
+            locked:true,
+            speedX:this.vx,
+            speedY:this.vy
+        }
+    }
 }
 
 function initMainChar() {

@@ -21,8 +21,6 @@ function onAssetsLoaded() {
             //stage.addChild(coffre);
             
             
-            
-            
             renderer.render(stage);
 
             requestAnimationFrame(animate);
@@ -45,7 +43,7 @@ function animate() {
             }
 
             entity.play();
-            world.play(entity.vx, entity.vy);
+            world.play(entity.getAttitude());
             renderer.render(stage);
             requestAnimationFrame(animate);
         }
