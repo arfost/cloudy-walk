@@ -9,7 +9,7 @@ var path = require('path');
 app.use('/static', express.static('static'));
 
 app.get('/index', function (req, res) {
-  console.log('test')
+  //console.log('test')
   res.status(200).sendFile(__dirname + '/templates/index.html');
 });
 

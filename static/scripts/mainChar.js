@@ -7,6 +7,7 @@ class Entity {
             this.animations[anim].animationSpeed = params.anims[anim] && params.anims[anim].speed ? params.anims[anim].speed : 0.2;
             this.animations[anim].x = NaN;
             this.animations[anim].y = NaN;
+            this.animations[anim].zIndex = params.zIndex ? params.zIndex : 1;
             stage.addChild(this.animations[anim]);
         }
         this.animName = params.defaultAnim;
@@ -127,8 +128,9 @@ function initMainChar() {
     anims['catch'] = catchAnim;
 
     var params = {
-        y: renderer.height / 2,
+        y: 250,
         x: renderer.width / 2,
+        zIndex: 1,
         defaultAnim: 'stand',
         anims: {
             stand: {

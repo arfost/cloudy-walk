@@ -1,50 +1,52 @@
 function onAssetsLoaded() {
 
-            initWorld();
-            initMainChar();
+    initWorld();
+    initMainChar();
 
-            nuage = new PIXI.Sprite(PIXI.Texture.fromFrame('nuage.png'));
+    nuage = new PIXI.Sprite(PIXI.Texture.fromFrame('nuage.png'));
 
-            nuage.x = -100;
-            nuage.y = 50;
+    nuage.x = -100;
+    nuage.y = 50;
 
-            nuage.vx = 1.5;
-            nuage.vy = -0.5;
+    nuage.vx = 1.5;
+    nuage.vy = -0.5;
 
-            stage.addChild(nuage);
+    //stage.addChild(nuage);
 
-            coffre = new PIXI.Sprite(PIXI.Texture.fromFrame('coffre.png'));
+    stage.updateLayersOrder = function () {
+        console.log("comparaison : ", this.children)
+        this.children.sort(function (a, b) {
+            a.zIndex = a.zIndex || 0;
+            b.zIndex = b.zIndex || 0;
+            console.log("comparaison : ", a.zIndex, b. zIndex)
+            return b.zIndex - a.zIndex
+        });
+    };
+    stage.updateLayersOrder();
+    renderer.render(stage);
 
-            coffre.x = 96;
-            coffre.y = renderer.height / 2;
+    requestAnimationFrame(animate);
 
-            //stage.addChild(coffre);
-            
-            
-            renderer.render(stage);
-
-            requestAnimationFrame(animate);
-        }
+}
 
 
 function animate() {
-            //anim.x++;
-            
-            nuage.x += nuage.vx;
-            nuage.y += nuage.vy;
-            if (nuage.x > 600) {
-                nuage.x = 0;
-            }
-            if (nuage.y > 100) {
-                nuage.vy = -0.5;
-            }
-            if (nuage.y < 50) {
-                nuage.vy = 0.5;
-            }
+    //anim.x++;
 
-            entity.play();
-            world.play(entity.getAttitude());
-            renderer.render(stage);
-            requestAnimationFrame(animate);
-        }
-        
+    nuage.x += nuage.vx;
+    nuage.y += nuage.vy;
+    if (nuage.x > 600) {
+        nuage.x = 0;
+    }
+    if (nuage.y > 100) {
+        nuage.vy = -0.5;
+    }
+    if (nuage.y < 50) {
+        nuage.vy = 0.5;
+    }
+
+    entity.play();
+    world.play(entity.getAttitude());
+    renderer.render(stage);
+    requestAnimationFrame(animate);
+}
