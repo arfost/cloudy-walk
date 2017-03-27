@@ -14,11 +14,9 @@ function onAssetsLoaded() {
     //stage.addChild(nuage);
 
     stage.updateLayersOrder = function () {
-        console.log("comparaison : ", this.children)
         this.children.sort(function (a, b) {
             a.zIndex = a.zIndex || 0;
             b.zIndex = b.zIndex || 0;
-            console.log("comparaison : ", a.zIndex, b. zIndex)
             return b.zIndex - a.zIndex
         });
     };

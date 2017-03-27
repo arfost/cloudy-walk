@@ -8,9 +8,9 @@ var path = require('path');
 
 app.use('/static', express.static('static'));
 
-app.get('/index', function (req, res) {
+app.get('/', function (req, res) {
   //console.log('test')
-  res.status(200).sendFile(__dirname + '/templates/index.html');
+  res.status(200).sendFile(__dirname + '/index.html');
 });
 
 app.listen(26000, function () {
