@@ -47,7 +47,7 @@ class World {
 
 class Layer {
     constructor(stage, picture, position, offset) {
-        var texture = PIXI.Texture.fromImage("../static/images/" + picture + ".png");
+        var texture = PIXI.Texture.fromImage("static/images/" + picture + ".png");
         var tile = new PIXI.extras.TilingSprite(texture, position.x, position.y);
         tile.position.x = position.posX;
         tile.position.y = position.posY;

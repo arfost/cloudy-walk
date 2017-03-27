@@ -14,9 +14,9 @@
             renderer = PIXI.autoDetectRenderer(600, 600);
         renderer.backgroundColor = 0xffffff;
         document.body.appendChild(renderer.view);
-        var entity, world, nuage, coffre;
+        var entity, world, nuage;
         PIXI.loader
-            .add('../static/images/rebechar.json')
+            .add('static/images/rebechar.json')
             .load(onAssetsLoaded);
 
             
