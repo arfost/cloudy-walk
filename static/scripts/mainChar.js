@@ -16,6 +16,7 @@ class Entity {
         this.animation.gotoAndPlay(0);
         this.animation.x = params.x ? params.x : 0;
         this.animation.y = params.y ? params.y : 0;
+        this.lock = true;
     }
     getX() {
         return this.animation.x;
@@ -53,6 +54,10 @@ class Entity {
         } else if (this.vx == 0 && this.animName == "walkLeft") {
             this.switchAnim('standLeft');
         }
+        if(!this.lock){
+            this.animation.x += this.vx;
+            this.animation.x += this.vy;
+        }
     }
     switchAnim(anim) {
         if (this.animName != anim) {
@@ -71,7 +76,7 @@ class Entity {
 
     getAttitude(){
         return {
-            locked:true,
+            locked:this.lock,
             speedX:this.vx,
             speedY:this.vy
         }
@@ -148,6 +153,7 @@ function initMainChar() {
     var left = keyboard(37);
     var up = keyboard(38);
     var down = keyboard(40);
+    var shift = keyboard(16);
 
     right.press = function () {
         entity.vx = 2;
@@ -181,5 +187,15 @@ function initMainChar() {
     //Left arrow key `release` method
     down.release = function () {
         entity.switchAnim("lookup")
+    };
+
+    shift.press = function () {
+        console.log("unlock")
+        entity.lock = false;
+    };
+    //Left arrow key `release` method
+    shift.release = function () {
+        console.log("lock")
+        entity.lock = true;
     };
 }
