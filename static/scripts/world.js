@@ -8,7 +8,7 @@ class World {
         this.layers = [];
 
         this.layers.push(new Layer(stage, 'far_back', { x: 800, y: 600, posX: 0, posY: 0, zIndex:5 }, 0.128));
-        this.layers.push(new Layer(stage, 'medium_back', { x: 800, y: 200, posX: 0, posY: 200, zIndex:4 }, 0.64));
+        this.layers.push(new Layer(stage, 'medium_back', { x: 800, y: 200, posX: 0, posY: 200, zIndex:4 }, 1));
 
         this.things = [];
 

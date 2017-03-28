@@ -139,7 +139,7 @@ function initMainChar() {
                 speed: 0.1
             },
             catch: {
-                speed: 0.05
+                speed: 0.1
             },
         }
     }
@@ -157,7 +157,7 @@ function initMainChar() {
     var shift = keyboard(16);
 
     right.press = function () {
-        entity.vx = 2;
+        entity.vx = 1;
     };
     right.release = function () {
 
@@ -167,7 +167,7 @@ function initMainChar() {
     };
     //Left arrow key `press` method
     left.press = function () {
-        entity.vx = -2;
+        entity.vx = -1;
     };
     //Left arrow key `release` method
     left.release = function () {
