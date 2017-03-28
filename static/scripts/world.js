@@ -20,7 +20,9 @@ class World {
             boundaryX: 300,
             boundaryY: 300,
             deltaX: 0,
-            deltaY: 0
+            deltaY: 0,
+            zoom:1,
+            deltaZoom:0
         }
 
     }

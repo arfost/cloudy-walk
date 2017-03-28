@@ -5,10 +5,7 @@ class Entity {
             this.animations[anim] = new PIXI.extras.MovieClip(anims[anim]);
             this.animations[anim].anchor.set(0.5);
             this.animations[anim].animationSpeed = params.anims[anim] && params.anims[anim].speed ? params.anims[anim].speed : 0.2;
-            this.animations[anim].x = NaN;
-            this.animations[anim].y = NaN;
             this.animations[anim].zIndex = params.zIndex ? params.zIndex : 1;
-            stage.addChild(this.animations[anim]);
         }
         this.animName = params.defaultAnim;
         this.animation = this.animations[params.defaultAnim];
@@ -17,6 +14,8 @@ class Entity {
         this.animation.gotoAndPlay(0);
         this.animation.x = params.x ? params.x : 0;
         this.animation.y = params.y ? params.y : 0;
+        stage.addChild(this.animation);
+        this.stage = stage;
         this.lock = true;
     }
     getX() {
@@ -65,13 +64,13 @@ class Entity {
             this.animName = anim;
             var tmpX = this.animation.x;
             var tmpY = this.animation.y;
-            this.animation.x = NaN;
-            this.animation.y = NaN;
             this.animation.stop();
+            this.stage.removeChild(this.animation);
             this.animation = this.animations[anim];
             this.animation.gotoAndPlay(0);
             this.animation.x = tmpX;
             this.animation.y = tmpY;
+            this.stage.addChild(this.animation);
         }
     }
 
