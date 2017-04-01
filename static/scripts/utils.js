@@ -34,21 +34,3 @@ function keyboard(keyCode) {
     );
     return key;
 }
-
-//The `hitTestRectangle` function
-function hitTestRectangle(r1, r2) {
-
-    //Define the variables we'll need to calculate
-    var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
-
-    //hit will determine whether there's a collision
-    hit = false;
-
-    if (
-        r1.x == r2.x || r1.x == r2.x + r2.width
-    ) {
-        hit = true;
-    }
-
-    return hit;
-};

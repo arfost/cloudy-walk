@@ -24,7 +24,7 @@ class World {
 
         this.things = [];
 
-        this.things.push(new Coffre(stage, {x:500, y:200, zIndex:3}, 'coffre', {width:195, height:142}))
+        this.things.push(new Coffre(stage, {x:500, y:220, zIndex:3}, 'coffre', {width:195, height:142}))
 
         this.camPos = {
             x: 300,
@@ -145,8 +145,8 @@ class Coffre extends Thing{
         deplacement.y = 0;
 
         if(charAttitude.push){
-            console.log("i see him push : ", charAttitude.bound, this.getBound(), hitTestRectangle(charAttitude.bound, this.getBound()))
-            if(hitTestRectangle(charAttitude.bound, this.getBound())){
+            //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
+            if(this.hitTestRectangle(charAttitude.bound, this.getBound())){
                 console.log("and i feel it")
                 deplacement.x += charAttitude.speedX;
             }
@@ -164,6 +164,23 @@ class Coffre extends Thing{
         }
         return bound;
     }
+
+    hitTestRectangle(r1, r2) {
+
+    //Define the variables we'll need to calculate
+    var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+    //hit will determine whether there's a collision
+    hit = false;
+
+    if (
+        r1.x == r2.x || r1.x == r2.x + r2.width
+    ) {
+        hit = true;
+    }
+
+    return hit;
+};
 }
 
 class Nuage extends Thing{
@@ -173,13 +190,7 @@ class Nuage extends Thing{
         deplacement.x = 0;
         deplacement.y = 0;
 
-        if(charAttitude.push){
-            console.log("i see him push : ", charAttitude.bound, this.getBound(), hitTestRectangle(charAttitude.bound, this.getBound()))
-            if(hitTestRectangle(charAttitude.bound, this.getBound())){
-                console.log("and i feel it")
-                deplacement.x += charAttitude.speedX;
-            }
-        }
+        
         this.pos.x += deplacement.x;
         this.pos.y += deplacement.y;
     }
