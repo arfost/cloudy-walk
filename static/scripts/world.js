@@ -19,13 +19,13 @@ class World {
 
         this.layers = [];
 
-        this.layers.push(new Layer(stage, 'far_back', { x: 800, y: 600, posX: 0, posY: 0, zIndex:5 }, 0.128));
-        this.layers.push(new Layer(stage, 'medium_back', { x: 800, y: 200, posX: 0, posY: 200, zIndex:4 }, 1));
+        this.layers.push(new Layer(stage, 'far_back', { x: 800, y: 600, posX: 0, posY: 0, zIndex: 5 }, 0.128));
+        this.layers.push(new Layer(stage, 'medium_back', { x: 800, y: 200, posX: 0, posY: 200, zIndex: 4 }, 1));
 
         this.things = [];
 
-        this.things.push(new Coffre(stage, {x:500, y:220, zIndex:3}, 'coffre', {width:195, height:142}))
-        this.things.push(new Nuage(stage, {x:-200, y:50, zIndex:3}, 'nuage', {width:130, height:95}))
+        this.things.push(new Coffre(stage, { x: 500, y: 220, zIndex: 3 }, 'coffre', { width: 195, height: 142 }))
+        this.things.push(new Nuage(stage, { x: -200, y: 50, zIndex: 1 }, 'nuage', { width: 130, height: 95 }))
 
         this.camPos = {
             x: 300,
@@ -34,8 +34,8 @@ class World {
             boundaryY: 300,
             deltaX: 0,
             deltaY: 0,
-            zoom:1,
-            deltaZoom:0
+            zoom: 1,
+            deltaZoom: 0
         }
 
     }
@@ -109,9 +109,9 @@ class Thing {
             if (!this.isAdded) {
                 this._addSelf(camPos)
             } else {
-                
+
                 this.turn(camPos, charAttitude);
-                
+
                 this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
                 this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
             }
@@ -121,7 +121,7 @@ class Thing {
             }
             this.offTurn(camPos, charAttitude)
         }
-        
+
     }
     _addSelf(camPos) {
         console.log("adding sprite", this.name)
@@ -137,20 +137,20 @@ class Thing {
         this.isAdded = false;
     }
 
-    turn(camPos, charAttitude){}
-    offTurn(camPos, charAttitude){}
+    turn(camPos, charAttitude) { }
+    offTurn(camPos, charAttitude) { }
 }
 
-class Coffre extends Thing{
+class Coffre extends Thing {
 
-    turn(camPos, charAttitude){
+    turn(camPos, charAttitude) {
         var deplacement = {};
         deplacement.x = 0;
         deplacement.y = 0;
 
-        if(charAttitude.etat == "push"){
+        if (charAttitude.etat == "push") {
             //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
-            if(this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)){
+            if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
                 console.log("and i feel it")
                 deplacement.x += charAttitude.speedX;
             }
@@ -159,7 +159,7 @@ class Coffre extends Thing{
         this.pos.y += deplacement.y;
     }
 
-    getBound(){
+    getBound() {
         var bound = {
             x: this.sprite.x,
             y: this.sprite.y,
@@ -171,64 +171,79 @@ class Coffre extends Thing{
 
     hitTestRectangle(r1, r2, direction) {
 
-    //Define the variables we'll need to calculate
-    var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+        //Define the variables we'll need to calculate
+        var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
 
-    //hit will determine whether there's a collision
-    hit = false;
+        //hit will determine whether there's a collision
+        hit = false;
 
-    if (
-        (r1.x == r2.x && direction == -1 )|| (r1.x == r2.x + r2.width && direction == 1)
-    ) {
-        hit = true;
-    }
+        if (
+            (r1.x == r2.x && direction == -1) || (r1.x == r2.x + r2.width && direction == 1)
+        ) {
+            hit = true;
+        }
 
-    return hit;
-};
+        return hit;
+    };
 }
 
-class Nuage extends Thing{
+class Nuage extends Thing {
 
-    constructor(stage, pos, img, size){
+    constructor(stage, pos, img, size) {
         super(stage, pos, img, size)
 
+        this.isFree = true;
         this.timeY = 40;
         this.vx = 1.5;
         this.vy = 1;
     }
 
-    offTurn(camPos, charAttitude){
-        var deplacement = {};
-        deplacement.x = 0;
-        deplacement.y = 0;
-        //console.log("turn", this.timeX)
+    offTurn(camPos, charAttitude) {
 
-        if(this.timeY == 0){
-            this.vy = -this.vy
-            this.timeY = 40;
-        }else{
-            this.timeY --;
+        if (this.isFree) {
+            var deplacement = {};
+            deplacement.x = 0;
+            deplacement.y = 0;
+            //console.log("turn", this.timeX)
+
+            if (this.timeY == 0) {
+                this.vy = -this.vy
+                this.timeY = 40;
+            } else {
+                this.timeY--;
+            }
+
+            deplacement.x += this.vx;
+            deplacement.y += this.vy;
+
+            this.pos.x += deplacement.x;
+            this.pos.y += deplacement.y;
         }
-        
-        deplacement.x += this.vx;
-        deplacement.y += this.vy;
-        
-        this.pos.x += deplacement.x;
-        this.pos.y += deplacement.y;
+
     }
 
-    turn(camPos, charAttitude){
+    turn(camPos, charAttitude) {
         this.offTurn();
 
-        if(this.vx > 0 && charAttitude.x < this.pos.x -20){
+        if (this.vx > 0 && charAttitude.x < this.pos.x + 20) {
             this.vx = -this.vx;
+            this.close = true;
         }
-        if(this.vx < 0 && charAttitude.x > this.pos.x +150){
+        if (this.vx < 0 && charAttitude.x > this.pos.x + 80) {
             this.vx = -this.vx;
+            this.close = true;
+        }
+
+        if (charAttitude.etat == "catch" && this.close){
+            this.isFree = false;
+            this.pos.x = charAttitude.x - this.sprite.width /2;
+            
+        }else{
+            this.isFree = true;
         }
     }
 
-    getBound(){
+    getBound() {
         var bound = {
             x: this.sprite.x,
             y: this.sprite.y,

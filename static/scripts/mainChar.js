@@ -6,6 +6,7 @@ class Entity {
             this.animations[anim].anchor.set(0.5);
             this.animations[anim].animationSpeed = params.anims[anim] && params.anims[anim].speed ? params.anims[anim].speed : 0.2;
             this.animations[anim].zIndex = params.zIndex ? params.zIndex : 1;
+            this.animations[anim].loop = params.anims[anim] && params.anims[anim].loop !== undefined ? params.anims[anim].loop : true;
         }
         this.animName = params.defaultAnim;
         this.animation = this.animations[params.defaultAnim];
@@ -57,9 +58,9 @@ class Entity {
                 this.switchAnim('standLeft');
             }
         } else if (this.etat == "catch"){
-            this.speedX =0;
+            this.speedX = 0;
             this.switchAnim('catch');
-        } else if (this.etat == "lookup" && this.speedX){
+        } else if (this.etat == "lookup" && this.speedX == 0){
             this.switchAnim('lookup');
         } else {
             if (this.speedX < 0 && this.animName != "walkLeft") {
@@ -89,6 +90,7 @@ class Entity {
             this.animation.x = tmpX;
             this.animation.y = tmpY;
             this.stage.addChild(this.animation);
+            this.stage.updateLayersOrder();
         }
     }
     getX() {
@@ -181,7 +183,7 @@ function initMainChar() {
     var params = {
         y: 250,
         x: renderer.width / 2,
-        zIndex: 1,
+        zIndex: 2,
         defaultAnim: 'stand',
         anims: {
             stand: {
@@ -191,7 +193,8 @@ function initMainChar() {
                 speed: 0.1
             },
             catch: {
-                speed: 0.1
+                speed: 0.1,
+                loop: false
             },
         }
     }
