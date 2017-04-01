@@ -146,7 +146,7 @@ class Coffre extends Thing{
 
         if(charAttitude.push){
             //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
-            if(this.hitTestRectangle(charAttitude.bound, this.getBound())){
+            if(this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)){
                 console.log("and i feel it")
                 deplacement.x += charAttitude.speedX;
             }
@@ -165,7 +165,7 @@ class Coffre extends Thing{
         return bound;
     }
 
-    hitTestRectangle(r1, r2) {
+    hitTestRectangle(r1, r2, direction) {
 
     //Define the variables we'll need to calculate
     var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
@@ -174,7 +174,7 @@ class Coffre extends Thing{
     hit = false;
 
     if (
-        r1.x == r2.x || r1.x == r2.x + r2.width
+        (r1.x == r2.x && direction == -1 )|| (r1.x == r2.x + r2.width && direction == 1)
     ) {
         hit = true;
     }
