@@ -24,7 +24,7 @@ class World {
 
         this.things = [];
 
-        this.things.push(new Coffre(stage, {x:500, y:200, zIndex:3}, 'coffre', {width:260, height:190}))
+        this.things.push(new Coffre(stage, {x:500, y:200, zIndex:3}, 'coffre', {width:195, height:142}))
 
         this.camPos = {
             x: 300,
@@ -138,6 +138,35 @@ class Thing {
 }
 
 class Coffre extends Thing{
+
+    turn(camPos, charAttitude){
+        var deplacement = {};
+        deplacement.x = 0;
+        deplacement.y = 0;
+
+        if(charAttitude.push){
+            console.log("i see him push : ", charAttitude.bound, this.getBound(), hitTestRectangle(charAttitude.bound, this.getBound()))
+            if(hitTestRectangle(charAttitude.bound, this.getBound())){
+                console.log("and i feel it")
+                deplacement.x += charAttitude.speedX;
+            }
+        }
+        this.pos.x += deplacement.x;
+        this.pos.y += deplacement.y;
+    }
+
+    getBound(){
+        var bound = {
+            x: this.sprite.x,
+            y: this.sprite.y,
+            width: this.sprite.width,
+            height: this.sprite.height
+        }
+        return bound;
+    }
+}
+
+class Nuage extends Thing{
 
     turn(camPos, charAttitude){
         var deplacement = {};

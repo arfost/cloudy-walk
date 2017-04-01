@@ -45,7 +45,7 @@ function hitTestRectangle(r1, r2) {
     hit = false;
 
     if (
-        r1.x >= r2.x && r2.x + r2.width >= r1.x
+        r1.x == r2.x || r1.x == r2.x + r2.width
     ) {
         hit = true;
     }

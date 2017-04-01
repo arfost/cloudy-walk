@@ -180,7 +180,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":325},
 	"sourceSize": {"w":160,"h":325}
 },
-"pushLeft01.png":
+"push01.png":
 {
 	"frame": {"x":1,"y":745,"w":195,"h":265},
 	"rotated": false,
@@ -188,7 +188,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"pushLeft02.png":
+"push02.png":
 {
 	"frame": {"x":195,"y":745,"w":195,"h":265},
 	"rotated": false,
@@ -196,7 +196,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"pushLeft03.png":
+"push03.png":
 {
 	"frame": {"x":390,"y":745,"w":195,"h":265},
 	"rotated": false,
@@ -204,7 +204,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"pushLeft04.png":
+"push04.png":
 {
 	"frame": {"x":585,"y":745,"w":195,"h":265},
 	"rotated": false,
@@ -212,7 +212,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"pushLeft05.png":
+"push05.png":
 {
 	"frame": {"x":780,"y":745,"w":195,"h":265},
 	"rotated": false,
@@ -220,7 +220,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"push01.png":
+"pushLeft01.png":
 {
 	"frame": {"x":1,"y":1010,"w":195,"h":265},
 	"rotated": false,
@@ -228,7 +228,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"push02.png":
+"pushLeft02.png":
 {
 	"frame": {"x":195,"y":1010,"w":195,"h":265},
 	"rotated": false,
@@ -236,7 +236,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"push03.png":
+"pushLeft03.png":
 {
 	"frame": {"x":390,"y":1010,"w":195,"h":265},
 	"rotated": false,
@@ -244,7 +244,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"push04.png":
+"pushLeft04.png":
 {
 	"frame": {"x":585,"y":1010,"w":195,"h":265},
 	"rotated": false,
@@ -252,7 +252,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":265},
 	"sourceSize": {"w":195,"h":265}
 },
-"push05.png":
+"pushLeft05.png":
 {
 	"frame": {"x":780,"y":1010,"w":195,"h":265},
 	"rotated": false,

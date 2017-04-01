@@ -100,6 +100,7 @@ class Entity {
             width: this.animation.width,
             height: this.animation.height
         }
+        
         return bound;
     }
 
