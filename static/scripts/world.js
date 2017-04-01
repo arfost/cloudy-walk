@@ -1,5 +1,17 @@
 function initWorld() {
     world = new World(stage)
+    world.locked = true;
+    //lock the camera
+    var shift = keyboard(16);
+    shift.press = function () {
+        console.log("unlock")
+        world.locked = false;
+    };
+    //Left arrow key `release` method
+    shift.release = function () {
+        console.log("lock")
+        world.locked = true;
+    };
 }
 
 class World {
@@ -12,10 +24,10 @@ class World {
 
         this.things = [];
 
-        this.things.push(new Thing(stage, {x:500, y:300, zIndex:3}, 'coffre'))
+        this.things.push(new Coffre(stage, {x:500, y:200, zIndex:3}, 'coffre', {width:260, height:190}))
 
         this.camPos = {
-            x: 0,
+            x: 300,
             y: 300,
             boundaryX: 300,
             boundaryY: 300,
@@ -27,8 +39,17 @@ class World {
 
     }
 
-    play(charAttitude) {
-        if (charAttitude.locked) {
+    play(mainChar) {
+
+        var charAttitude = mainChar.getAttitude();
+        //console.log("charAttitude : ", charAttitude)
+        for (var layer of this.layers) {
+            layer.play(this.camPos);
+        }
+        for (var thing of this.things) {
+            thing.play(this.camPos, charAttitude);
+        }
+        if (this.locked) {
             this.camPos.x += charAttitude.speedX;
             this.camPos.deltaX = charAttitude.speedX
 
@@ -38,12 +59,12 @@ class World {
             this.camPos.deltaX = 0
             this.camPos.deltaY = 0
         }
-        for (var layer of this.layers) {
-            layer.play(this.camPos);
+        var charPos = {
+            x: charAttitude.x + charAttitude.speedX,
+            y: charAttitude.y + charAttitude.speedY,
+            effets: charAttitude.effets
         }
-        for (var thing of this.things) {
-            thing.play(this.camPos, charAttitude);
-        }
+        mainChar.play(this.camPos, charPos)
     }
 }
 
@@ -69,24 +90,29 @@ class Layer {
 
 class Thing {
 
-    constructor(stage, pos, img) {
+    constructor(stage, pos, img, size) {
         this.name = img;
         this.stage = stage;
         this.pos = pos;
         this.sprite = new PIXI.Sprite(PIXI.Texture.fromFrame(img + '.png'));
+        this.sprite.width = size.width;
+        this.sprite.height = size.height;
         this.sprite.zIndex = pos.zIndex;
         this.isAdded = false;
     }
 
-    play(camPos) {
+    play(camPos, charAttitude) {
         if (
-            ((camPos.x - camPos.boundaryX) < this.pos.x && (camPos.x + camPos.boundaryX) > this.pos.x) &&
-            ((camPos.y - camPos.boundaryY) < this.pos.y && (camPos.y + camPos.boundaryY) > this.pos.y)) {
+            ((camPos.x - camPos.boundaryX) < this.pos.x + this.sprite.width && (camPos.x + camPos.boundaryX) > this.pos.x) &&
+            ((camPos.y - camPos.boundaryY) < this.pos.y + this.sprite.height && (camPos.y + camPos.boundaryY) > this.pos.y)) {
             if (!this.isAdded) {
                 this._addSelf(camPos)
             } else {
-                this.sprite.x -= camPos.deltaX;
-                this.sprite.y -= camPos.deltaY;
+                
+                this.turn(camPos, charAttitude);
+                
+                this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
+                this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
             }
         } else {
             if (this.isAdded) {
@@ -96,8 +122,6 @@ class Thing {
     }
     _addSelf(camPos) {
         console.log("adding sprite", this.name)
-        this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
-        this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
         this.stage.addChild(this.sprite);
         this.stage.updateLayersOrder();
         this.isAdded = true;
@@ -108,5 +132,36 @@ class Thing {
         this.stage.removeChild(this.sprite);
         this.stage.updateLayersOrder();
         this.isAdded = false;
+    }
+
+    turn(camPos, charAttitude){}
+}
+
+class Coffre extends Thing{
+
+    turn(camPos, charAttitude){
+        var deplacement = {};
+        deplacement.x = 0;
+        deplacement.y = 0;
+
+        if(charAttitude.push){
+            console.log("i see him push : ", charAttitude.bound, this.getBound(), hitTestRectangle(charAttitude.bound, this.getBound()))
+            if(hitTestRectangle(charAttitude.bound, this.getBound())){
+                console.log("and i feel it")
+                deplacement.x += charAttitude.speedX;
+            }
+        }
+        this.pos.x += deplacement.x;
+        this.pos.y += deplacement.y;
+    }
+
+    getBound(){
+        var bound = {
+            x: this.sprite.x,
+            y: this.sprite.y,
+            width: this.sprite.width,
+            height: this.sprite.height
+        }
+        return bound;
     }
 }

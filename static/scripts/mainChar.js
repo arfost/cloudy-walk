@@ -9,55 +9,68 @@ class Entity {
         }
         this.animName = params.defaultAnim;
         this.animation = this.animations[params.defaultAnim];
-        this.vx = 0;
-        this.vy = 0;
+        this.speedX = 0;
+        this.speedY = 0;
         this.animation.gotoAndPlay(0);
-        this.animation.x = params.x ? params.x : 0;
-        this.animation.y = params.y ? params.y : 0;
+        this.x = params.x ? params.x : 0;
+        this.y = params.y ? params.y : 0;
         stage.addChild(this.animation);
         this.stage = stage;
-        this.lock = true;
     }
-    getX() {
+    getScreenX() {
         return this.animation.x;
     }
-    getY() {
+    getScreenY() {
         return this.animation.y;
     }
-    setX(x) {
+    setScreenX(x) {
+        //console.log("set X :",x)
         this.animation.x = x;
     }
-    setY(y) {
+    setScreenY(y) {
+        //console.log("set Y :",y)
         this.animation.y = y;
     }
-    getVX() {
-        return this.vx;
+    getspeedX() {
+        return this.speedX;
     }
-    getVY() {
-        return this.vy;
+    getspeedY() {
+        return this.speedY;
     }
-    setVX(vx) {
-        this.vx = vx;
+    setspeedX(speedX) {
+        this.speedX = speedX;
     }
-    setVY(vy) {
-        this.vy = vy;
+    setspeedY(speedY) {
+        this.speedY = speedY;
     }
-    play() {
-        //this.animation.x += this.vx;
-        //this.animation.y += this.vy;
-        if (this.vx < 0 && this.animName != "walkLeft") {
-            this.switchAnim('walkLeft');
-        } else if (this.vx > 0 && this.animName != "walk") {
-            this.switchAnim('walk');
-        } else if (this.vx == 0 && this.animName == "walk") {
-            this.switchAnim('stand');
-        } else if (this.vx == 0 && this.animName == "walkLeft") {
-            this.switchAnim('standLeft');
+    play(camPos, charPos) {
+        //this.animation.x += this.speedX;
+        //this.animation.y += this.speedY;
+        if (this.push) {
+            if (this.speedX < 0 && this.animName != "pushLeft") {
+                this.switchAnim('pushLeft');
+            } else if (this.speedX > 0 && this.animName != "push") {
+                this.switchAnim('push');
+            } else if (this.speedX == 0 && this.animName == "push") {
+                this.switchAnim('stand');
+            } else if (this.speedX == 0 && this.animName == "pushLeft") {
+                this.switchAnim('standLeft');
+            }
+        } else {
+            if (this.speedX < 0 && this.animName != "walkLeft") {
+                this.switchAnim('walkLeft');
+            } else if (this.speedX > 0 && this.animName != "walk") {
+                this.switchAnim('walk');
+            } else if (this.speedX == 0 && this.animName == "walk") {
+                this.switchAnim('stand');
+            } else if (this.speedX == 0 && this.animName == "walkLeft") {
+                this.switchAnim('standLeft');
+            }
         }
-        if(!this.lock){
-            this.animation.x += this.vx;
-            this.animation.x += this.vy;
-        }
+        this.setScreenX(charPos.x - (camPos.x - camPos.boundaryX));
+        this.x = charPos.x;
+        this.setScreenY(charPos.y - (camPos.y - camPos.boundaryY));
+        this.y = charPos.y;
     }
     switchAnim(anim) {
         if (this.animName != anim) {
@@ -73,12 +86,31 @@ class Entity {
             this.stage.addChild(this.animation);
         }
     }
+    getX(){
+        return this.x;
+    }
+    getY(){
+        return this.y;
+    }
 
-    getAttitude(){
+    getBound(){
+        var bound = {
+            x: this.getScreenX(),
+            y: this.getScreenY(),
+            width: this.animation.width,
+            height: this.animation.height
+        }
+        return bound;
+    }
+
+    getAttitude() {
         return {
-            locked:this.lock,
-            speedX:this.vx,
-            speedY:this.vy
+            bound: this.getBound(),
+            x: this.getX(),
+            y: this.getY(),
+            speedX: this.getspeedX(),
+            speedY: this.getspeedY(),
+            push: this.push
         }
     }
 }
@@ -116,6 +148,18 @@ function initMainChar() {
         catchAnim.push(PIXI.Texture.fromFrame('catch0' + i + '.png'));
     }
 
+    var pushAnim = [];
+    for (var i = 1; i <= 5; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        pushAnim.push(PIXI.Texture.fromFrame('push0' + i + '.png'));
+    }
+
+    var pushLeftAnim = [];
+    for (var i = 1; i <= 5; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        pushLeftAnim.push(PIXI.Texture.fromFrame('pushLeft0' + i + '.png'));
+    }
+
     var lookup = [PIXI.Texture.fromFrame('lookup.png')];
 
     var anims = {};
@@ -125,6 +169,8 @@ function initMainChar() {
     anims['standLeft'] = standLeft;
     anims['lookup'] = lookup;
     anims['catch'] = catchAnim;
+    anims['push'] = pushAnim;
+    anims['pushLeft'] = pushLeftAnim;
 
     var params = {
         y: 250,
@@ -154,35 +200,36 @@ function initMainChar() {
     var left = keyboard(37);
     var up = keyboard(38);
     var down = keyboard(40);
-    var shift = keyboard(16);
+    
+    var ctrl = keyboard(17);
 
     right.press = function () {
-        entity.vx = 1;
+        entity.speedX = 1;
     };
     right.release = function () {
 
         if (!left.isDown) {
-            entity.vx = 0;
+            entity.speedX = 0;
         }
     };
     //Left arrow key `press` method
     left.press = function () {
-        entity.vx = -1;
+        entity.speedX = -1;
     };
     //Left arrow key `release` method
     left.release = function () {
         if (!right.isDown) {
-            entity.vx = 0;
+            entity.speedX = 0;
         }
     };
 
     up.press = function () {
-        entity.vx = 0;
+        entity.speedX = 0;
         entity.switchAnim("lookup")
     };
 
     down.press = function () {
-        entity.vx = 0;
+        entity.speedX = 0;
         entity.switchAnim("catch")
     };
     //Left arrow key `release` method
@@ -190,13 +237,15 @@ function initMainChar() {
         entity.switchAnim("lookup")
     };
 
-    shift.press = function () {
-        console.log("unlock")
-        entity.lock = false;
+    
+
+    ctrl.press = function () {
+        //console.log("unlock")
+        entity.push = true;
     };
     //Left arrow key `release` method
-    shift.release = function () {
-        console.log("lock")
-        entity.lock = true;
+    ctrl.release = function () {
+        //console.log("lock")
+        entity.push = false;
     };
 }

@@ -44,8 +44,7 @@ function animate() {
         nuage.vy = 0.5;
     }
 
-    entity.play();
-    world.play(entity.getAttitude());
+    world.play(entity);
     renderer.render(stage);
     requestAnimationFrame(animate);
 }
