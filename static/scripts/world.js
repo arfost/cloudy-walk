@@ -25,6 +25,7 @@ class World {
         this.things = [];
 
         this.things.push(new Coffre(stage, {x:500, y:220, zIndex:3}, 'coffre', {width:195, height:142}))
+        this.things.push(new Nuage(stage, {x:-200, y:50, zIndex:3}, 'nuage', {width:130, height:95}))
 
         this.camPos = {
             x: 300,
@@ -118,7 +119,9 @@ class Thing {
             if (this.isAdded) {
                 this._removeSelf()
             }
+            this.offTurn(camPos, charAttitude)
         }
+        
     }
     _addSelf(camPos) {
         console.log("adding sprite", this.name)
@@ -135,6 +138,7 @@ class Thing {
     }
 
     turn(camPos, charAttitude){}
+    offTurn(camPos, charAttitude){}
 }
 
 class Coffre extends Thing{
@@ -144,7 +148,7 @@ class Coffre extends Thing{
         deplacement.x = 0;
         deplacement.y = 0;
 
-        if(charAttitude.push){
+        if(charAttitude.etat == "push"){
             //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
             if(this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)){
                 console.log("and i feel it")
@@ -185,14 +189,43 @@ class Coffre extends Thing{
 
 class Nuage extends Thing{
 
-    turn(camPos, charAttitude){
+    constructor(stage, pos, img, size){
+        super(stage, pos, img, size)
+
+        this.timeY = 40;
+        this.vx = 1.5;
+        this.vy = 1;
+    }
+
+    offTurn(camPos, charAttitude){
         var deplacement = {};
         deplacement.x = 0;
         deplacement.y = 0;
+        //console.log("turn", this.timeX)
 
+        if(this.timeY == 0){
+            this.vy = -this.vy
+            this.timeY = 40;
+        }else{
+            this.timeY --;
+        }
+        
+        deplacement.x += this.vx;
+        deplacement.y += this.vy;
         
         this.pos.x += deplacement.x;
         this.pos.y += deplacement.y;
+    }
+
+    turn(camPos, charAttitude){
+        this.offTurn();
+
+        if(this.vx > 0 && charAttitude.x < this.pos.x -20){
+            this.vx = -this.vx;
+        }
+        if(this.vx < 0 && charAttitude.x > this.pos.x +150){
+            this.vx = -this.vx;
+        }
     }
 
     getBound(){

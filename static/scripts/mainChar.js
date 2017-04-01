@@ -46,7 +46,7 @@ class Entity {
     play(camPos, charPos) {
         //this.animation.x += this.speedX;
         //this.animation.y += this.speedY;
-        if (this.push) {
+        if (this.etat == "push") {
             if (this.speedX < 0 && this.animName != "pushLeft") {
                 this.switchAnim('pushLeft');
             } else if (this.speedX > 0 && this.animName != "push") {
@@ -56,6 +56,11 @@ class Entity {
             } else if (this.speedX == 0 && this.animName == "pushLeft") {
                 this.switchAnim('standLeft');
             }
+        } else if (this.etat == "catch"){
+            this.speedX =0;
+            this.switchAnim('catch');
+        } else if (this.etat == "lookup" && this.speedX){
+            this.switchAnim('lookup');
         } else {
             if (this.speedX < 0 && this.animName != "walkLeft") {
                 this.switchAnim('walkLeft');
@@ -86,21 +91,21 @@ class Entity {
             this.stage.addChild(this.animation);
         }
     }
-    getX(){
+    getX() {
         return this.x;
     }
-    getY(){
+    getY() {
         return this.y;
     }
 
-    getBound(){
+    getBound() {
         var bound = {
             x: this.getScreenX(),
             y: this.getScreenY(),
             width: this.animation.width,
             height: this.animation.height
         }
-        
+
         return bound;
     }
 
@@ -111,7 +116,7 @@ class Entity {
             y: this.getY(),
             speedX: this.getspeedX(),
             speedY: this.getspeedY(),
-            push: this.push
+            etat: this.etat
         }
     }
 }
@@ -201,7 +206,7 @@ function initMainChar() {
     var left = keyboard(37);
     var up = keyboard(38);
     var down = keyboard(40);
-    
+
     var ctrl = keyboard(17);
 
     right.press = function () {
@@ -225,28 +230,30 @@ function initMainChar() {
     };
 
     up.press = function () {
-        entity.speedX = 0;
-        entity.switchAnim("lookup")
+        entity.etat = "catch";
+    };
+
+    up.release = function () {
+        entity.etat = "lookup";
     };
 
     down.press = function () {
-        entity.speedX = 0;
-        entity.switchAnim("catch")
+        entity.etat = "lookup";
     };
     //Left arrow key `release` method
     down.release = function () {
-        entity.switchAnim("lookup")
+        entity.etat = ""
     };
 
-    
+
 
     ctrl.press = function () {
         //console.log("unlock")
-        entity.push = true;
+        entity.etat = "push";
     };
     //Left arrow key `release` method
     ctrl.release = function () {
         //console.log("lock")
-        entity.push = false;
+        entity.etat = "";
     };
 }
