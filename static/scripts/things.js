@@ -83,18 +83,22 @@ class Coffre extends Thing {
         this.stage.updateLayersOrder();
     }
 
+    offTurn(camPos, charAttitude){
+        if (charAttitude.etat == "push") {
+            console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
+            if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
+                //console.log("and i feel it")
+                this.pos.x += charAttitude.speedX;
+            }
+        }
+    }
+
     turn(camPos, charAttitude) {
         var deplacement = {};
         deplacement.x = 0;
         deplacement.y = 0;
 
-        if (charAttitude.etat == "push") {
-            //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
-            if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
-                //console.log("and i feel it")
-                deplacement.x += charAttitude.speedX;
-            }
-        }
+        this.offTurn(camPos, charAttitude)
 
         if (charAttitude.etat == "catch") {
             if (!this.opened) {
@@ -113,8 +117,8 @@ class Coffre extends Thing {
 
     getBound() {
         var bound = {
-            x: this.sprite.x,
-            y: this.sprite.y,
+            x: this.pos.x,
+            y: this.pos.y,
             width: this.sprite.width,
             height: this.sprite.height
         }
@@ -165,10 +169,10 @@ class Nuage extends Thing {
                 this.timeY--;
             }
 
-            if(this.pos.x > charAttitude.x && !this.close){
+            if(this.pos.x + (this.sprite.width / 2)> charAttitude.x && !this.close){
                 this.vx = -1.5
             }
-            if(this.pos.x < charAttitude.x && !this.close){
+            if(this.pos.x + (this.sprite.width / 2)< charAttitude.x && !this.close){
                 this.vx = 1.5
             }
             deplacement.x += this.vx;
@@ -223,4 +227,8 @@ class Nuage extends Thing {
         }
         return bound;
     }
+}
+
+class Colline extends Thing{
+
 }

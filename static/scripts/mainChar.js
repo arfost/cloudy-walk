@@ -134,8 +134,8 @@ class Entity {
 
     getBound() {
         var bound = {
-            x: this.getScreenX(),
-            y: this.getScreenY(),
+            x: this.getX(),
+            y: this.getY(),
             width: this.animation.width,
             height: this.animation.height
         }

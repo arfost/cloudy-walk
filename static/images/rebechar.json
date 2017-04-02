@@ -321,6 +321,14 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":247,"h":343},
 	"sourceSize": {"w":247,"h":343}
 },
+"colline.png":
+{
+	"frame": {"x":1215,"y":950,"w":335,"h":325},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":335,"h":325},
+	"sourceSize": {"w":335,"h":325}
+},
 "nuage.png":
 {
 	"frame": {"x":1,"y":305,"w":130,"h":95},
