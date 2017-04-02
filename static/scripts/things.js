@@ -187,7 +187,7 @@ class Nuage extends Thing {
     turn(camPos, charAttitude) {
         this.offTurn(camPos, charAttitude);
         if (!charAttitude.effets.includes("put")) {
-            if (this.vx > 0 && charAttitude.x < this.pos.x + (this.sprite.width / 2) - 30 || this.vx < 0 && charAttitude.x > this.pos.x + (this.sprite.width / 2) + 20) {
+            if (charAttitude.x > this.pos.x + (this.sprite.width / 2) - 30 && charAttitude.x < this.pos.x + (this.sprite.width / 2) + 20) {
                 this.vx = -this.vx;
                 this.close = true;
             }else{
@@ -208,7 +208,7 @@ class Nuage extends Thing {
 
             if (charAttitude.effets.includes("put")) {
                 this.pos.y += 5
-                this.pos.x += -3
+                this.pos.x += -3.5
             } else {
                 charAttitude.effets.push("catched");
             }
