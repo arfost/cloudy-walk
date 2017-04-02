@@ -25,7 +25,7 @@ class World {
         this.things = [];
 
         this.things.push(new Thing(stage, { x: 900, y: 50, zIndex: 3 }, 'arbre', { width: 247, height: 343 }))
-        this.things.push(new Coffre(stage, { x: -100, y: 220, zIndex: 3 }, 'coffre', { width: 195, height: 142 }))
+        this.things.push(new Coffre(stage, { x: -200, y: 220, zIndex: 3 }, 'coffre', { width: 195, height: 142 }))
         this.things.push(new Nuage(stage, { x: -300, y: 50, zIndex: 1 }, 'nuage', { width: 130, height: 95 }))
 
         this.camPos = {
