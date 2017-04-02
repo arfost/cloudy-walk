@@ -261,6 +261,42 @@
 	"sourceSize": {"w":195,"h":265}
 },
 
+
+
+
+"put01.png":
+{
+	"frame": {"x":975,"y":715,"w":95,"h":220},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":220},
+	"sourceSize": {"w":95,"h":220}
+},
+"put02.png":
+{
+	"frame": {"x":1060,"y":715,"w":95,"h":220},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":220},
+	"sourceSize": {"w":95,"h":220}
+},
+"put03.png":
+{
+	"frame": {"x":1155,"y":715,"w":95,"h":220},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":220},
+	"sourceSize": {"w":95,"h":220}
+},
+"put04.png":
+{
+	"frame": {"x":975,"y":715,"w":95,"h":220},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":220},
+	"sourceSize": {"w":95,"h":220}
+},
+
 "coffre.png":
 {
 	"frame": {"x":250,"y":305,"w":130,"h":95},
@@ -268,6 +304,22 @@
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":130,"h":95},
 	"sourceSize": {"w":130,"h":95}
+},
+"coffre_open.png":
+{
+	"frame": {"x":380,"y":305,"w":130,"h":95},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":130,"h":95},
+	"sourceSize": {"w":130,"h":95}
+},
+"arbre.png":
+{
+	"frame": {"x":975,"y":937,"w":247,"h":343},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":247,"h":343},
+	"sourceSize": {"w":247,"h":343}
 },
 "nuage.png":
 {
@@ -282,7 +334,7 @@
 	"version": "1.0",
 	"image": "rebecharv2.png",
 	"format": "RGBA8888",
-	"size": {"w":1560,"h":400},
+	"size": {"w":1560,"h":1280},
 	"scale": "1",
 	"smartupdate": "$TexturePacker:SmartUpdate:51ede84c7a85e4d6aeb31a6020a20858:3923663e59fb40b578d66a492a2cda2d:9995f8b4db1ac3cb75651b1542df8ee2$"
 }

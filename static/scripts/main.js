@@ -14,7 +14,7 @@ function onAssetsLoaded() {
     //stage.addChild(nuage);
 
     stage.updateLayersOrder = function () {
-        console.log(this.children)
+        //console.log(this.children)
         this.children.sort(function (a, b) {
             a.zIndex = a.zIndex || 0;
             b.zIndex = b.zIndex || 0;

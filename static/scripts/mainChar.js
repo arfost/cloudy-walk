@@ -5,6 +5,12 @@ class Entity {
             this.animations[anim] = new PIXI.extras.MovieClip(anims[anim]);
             this.animations[anim].anchor.set(0.5);
             this.animations[anim].animationSpeed = params.anims[anim] && params.anims[anim].speed ? params.anims[anim].speed : 0.2;
+            if(params.anims[anim] && params.anims[anim].width !== undefined){
+                this.animations[anim].width = params.anims[anim].width
+            }
+            if(params.anims[anim] && params.anims[anim].height !== undefined){
+                this.animations[anim].height = params.anims[anim].height
+            }
             this.animations[anim].zIndex = params.zIndex ? params.zIndex : 1;
             this.animations[anim].loop = params.anims[anim] && params.anims[anim].loop !== undefined ? params.anims[anim].loop : true;
         }
@@ -17,6 +23,7 @@ class Entity {
         this.y = params.y ? params.y : 0;
         stage.addChild(this.animation);
         this.stage = stage;
+        this.effets = []
     }
     getScreenX() {
         return this.animation.x;
@@ -44,9 +51,19 @@ class Entity {
     setspeedY(speedY) {
         this.speedY = speedY;
     }
+    addEffect(effet){
+        if(this.effets.includes(effet))
+            return
+        
+        this.effets.push(effet)
+    }
+    removeEffect(effet){
+        this.effets.splice(entity.effets.indexOf(effet, 1))
+    }
     play(camPos, charPos) {
         //this.animation.x += this.speedX;
         //this.animation.y += this.speedY;
+        //var futurEtat = "";
         if (this.etat == "push") {
             if (this.speedX < 0 && this.animName != "pushLeft") {
                 this.switchAnim('pushLeft');
@@ -57,9 +74,21 @@ class Entity {
             } else if (this.speedX == 0 && this.animName == "pushLeft") {
                 this.switchAnim('standLeft');
             }
-        } else if (this.etat == "catch"){
+        } else if (this.effets.includes("put") && !this.animation.playing){
+            this.speedX = 0;
+            this.switchAnim('put');
+            this.removeEffect("catch")
+            this.animation.onComplete = ()=>{
+                
+                this.addEffect("suppr")
+            }
+        }else if (this.etat == "catch" && !this.effets.includes("put")){
             this.speedX = 0;
             this.switchAnim('catch');
+            this.animation.onComplete = ()=>{
+                this.addEffect("catch")
+                //this.etat = "lookup"
+            }
         } else if (this.etat == "lookup" && this.speedX == 0){
             this.switchAnim('lookup');
         } else {
@@ -77,6 +106,9 @@ class Entity {
         this.x = charPos.x;
         this.setScreenY(charPos.y - (camPos.y - camPos.boundaryY));
         this.y = charPos.y;
+        for(var effet of charPos.effets){
+            this.addEffect(effet);
+        }
     }
     switchAnim(anim) {
         if (this.animName != anim) {
@@ -118,7 +150,8 @@ class Entity {
             y: this.getY(),
             speedX: this.getspeedX(),
             speedY: this.getspeedY(),
-            etat: this.etat
+            etat: this.etat,
+            effets:JSON.parse(JSON.stringify(this.effets))
         }
     }
 }
@@ -168,6 +201,12 @@ function initMainChar() {
         pushLeftAnim.push(PIXI.Texture.fromFrame('pushLeft0' + i + '.png'));
     }
 
+    var put = [];
+    for (var i = 1; i <= 4; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        put.push(PIXI.Texture.fromFrame('put0' + i + '.png'));
+    }
+
     var lookup = [PIXI.Texture.fromFrame('lookup.png')];
 
     var anims = {};
@@ -179,6 +218,7 @@ function initMainChar() {
     anims['catch'] = catchAnim;
     anims['push'] = pushAnim;
     anims['pushLeft'] = pushLeftAnim;
+    anims['put'] = put;
 
     var params = {
         y: 250,
@@ -192,10 +232,16 @@ function initMainChar() {
             standLeft: {
                 speed: 0.1
             },
-            catch: {
-                speed: 0.1,
+            put: {
+                width: 135,
+                height: 260,
+                speed: 0.05,
                 loop: false
             },
+            catch: {
+                speed: 0.08,
+                loop: false
+            }
         }
     }
 
@@ -238,6 +284,9 @@ function initMainChar() {
 
     up.release = function () {
         entity.etat = "lookup";
+        entity.removeEffect("catch");
+        entity.removeEffect("catched")
+        console.log("entity effets", entity.effets)
     };
 
     down.press = function () {
