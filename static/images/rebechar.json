@@ -290,11 +290,11 @@
 },
 "put04.png":
 {
-	"frame": {"x":975,"y":715,"w":95,"h":220},
+	"frame": {"x":1250,"y":715,"w":125,"h":220},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":220},
-	"sourceSize": {"w":95,"h":220}
+	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":220},
+	"sourceSize": {"w":125,"h":220}
 },
 
 "coffre.png":
