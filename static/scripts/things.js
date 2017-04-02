@@ -165,6 +165,12 @@ class Nuage extends Thing {
                 this.timeY--;
             }
 
+            if(this.pos.x > charAttitude.x && !this.close){
+                this.vx = -1.5
+            }
+            if(this.pos.x < charAttitude.x && !this.close){
+                this.vx = 1.5
+            }
             deplacement.x += this.vx;
             deplacement.y += this.vy;
 
@@ -175,15 +181,13 @@ class Nuage extends Thing {
     }
 
     turn(camPos, charAttitude) {
-        this.offTurn();
+        this.offTurn(camPos, charAttitude);
         if (!charAttitude.effets.includes("put")) {
-            if (this.vx > 0 && charAttitude.x < this.pos.x + (this.sprite.width / 2) - 30) {
+            if (this.vx > 0 && charAttitude.x < this.pos.x + (this.sprite.width / 2) - 30 || this.vx < 0 && charAttitude.x > this.pos.x + (this.sprite.width / 2) + 20) {
                 this.vx = -this.vx;
                 this.close = true;
-            }
-            if (this.vx < 0 && charAttitude.x > this.pos.x + (this.sprite.width / 2) + 20) {
-                this.vx = -this.vx;
-                this.close = true;
+            }else{
+                this.close = false
             }
         }
 
