@@ -17,6 +17,8 @@ class Thing {
             ((camPos.y - camPos.boundaryY) < this.pos.y + this.sprite.height && (camPos.y + camPos.boundaryY) > this.pos.y)) {
             if (!this.isAdded) {
                 this._addSelf(camPos)
+                this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
+                this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
             } else {
 
                 this.turn(camPos, charAttitude);
