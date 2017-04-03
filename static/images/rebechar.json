@@ -327,6 +327,31 @@
 	"sourceSize": {"w":160,"h":215}
 },
 
+"getup01.png":
+{
+	"frame": {"x":1578,"y":512,"w":192,"h":245},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":192,"h":245},
+	"sourceSize": {"w":192,"h":245}
+},
+"getup02.png":
+{
+	"frame": {"x":1405,"y":672,"w":171,"h":276},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":171,"h":276},
+	"sourceSize": {"w":171,"h":276}
+},
+"getup03.png":
+{
+	"frame": {"x":1403,"y":328,"w":145,"h":332},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":145,"h":332},
+	"sourceSize": {"w":145,"h":332}
+},
+
 "coffre.png":
 {
 	"frame": {"x":250,"y":305,"w":130,"h":95},

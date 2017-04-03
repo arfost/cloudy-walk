@@ -45,6 +45,7 @@ class World {
     play(mainChar) {
 
         var charAttitude = mainChar.getAttitude();
+        charAttitude.newEffets = []
         //console.log("charAttitude : ", charAttitude)
         for (var layer of this.layers) {
             layer.play(this.camPos);
@@ -65,7 +66,7 @@ class World {
         var charPos = {
             x: charAttitude.x + charAttitude.speedX,
             y: charAttitude.y + charAttitude.speedY,
-            effets: charAttitude.effets
+            effets: charAttitude.newEffets
         }
         mainChar.play(this.camPos, charPos)
     }

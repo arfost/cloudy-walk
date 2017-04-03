@@ -108,7 +108,7 @@ class Coffre extends Thing {
             }
             if (charAttitude.effets.includes("catched") && Math.abs(this.pos.x - charAttitude.x + 150) < 100) {
                 console.log("and i put")
-                charAttitude.effets.push("put")
+                charAttitude.newEffets.push("put")
             }
         } else if (this.opened) {
             this.switchState();
@@ -210,9 +210,9 @@ class Nuage extends Thing {
 
             if (charAttitude.effets.includes("put")) {
                 this.pos.y += 5
-                this.pos.x += -3.5
+                this.pos.x += -2.5
             } else {
-                charAttitude.effets.push("catched");
+                charAttitude.newEffets.push("catched");
             }
         }
         if (charAttitude.effets.includes("suppr")) {
@@ -234,7 +234,7 @@ class Nuage extends Thing {
 class Colline extends Thing{
     turn(camPos, charAttitude){
         if(this.pos.x +20< charAttitude.x){
-            charAttitude.effets.push("climb")
+            charAttitude.newEffets.push("climb")
         }else if(this.pos.x < charAttitude.x) {
             charAttitude.speedY = -(charAttitude.speedX)
         }

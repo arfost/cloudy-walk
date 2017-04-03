@@ -97,20 +97,21 @@ class Entity {
             this.speedX = -2;
             this.animation.onComplete = ()=>{
                 this.removeEffect("climb")
+                //console.log("called again")
                 this.addEffect("down")
                 this.speedY = 0;
                 this.speedX = 0;
             }
         }else if (this.effets.includes("down") && this.speedX != 0){
             this.switchAnim('getup');
-            this.speedY = -0.3;
+            this.speedY = -0.5;
             this.speedX = 0;
+            //console.log("pre remove effect", this.effets.length, this.getY());
             this.removeEffect("down")
             this.animation.onComplete = ()=>{
                 this.speedY = 0;
                 console.log("cicle chute terminé", this.effets, this.getY());
-
-                //this.switchAnim('stand');
+                this.switchAnim('stand');
             }
         }else if (this.effets.includes("getup")){
             
@@ -231,9 +232,9 @@ function initMainChar() {
     }
 
     var getup = [];
-    for (var i = 1; i <= 4; i++) {
+    for (var i = 1; i <= 3; i++) {
         // magically works since the spritesheet was loaded with the pixi loader
-        getup.push(PIXI.Texture.fromFrame('climb0' + i + '.png'));
+        getup.push(PIXI.Texture.fromFrame('getup0' + i + '.png'));
     }
 
     var climb = [];
@@ -280,6 +281,8 @@ function initMainChar() {
                 loop: false
             },
             getup: {
+                width: 115,
+                height: 230,
                 speed: 0.05,
                 loop: false
             },
