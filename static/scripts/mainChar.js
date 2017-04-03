@@ -93,21 +93,27 @@ class Entity {
             this.switchAnim('lookup');
         }else if (this.effets.includes("climb")){
             this.switchAnim('climb');
-            this.speedY = 0.2;
-            this.speedX = -0.5;
+            this.speedY = 1;
+            this.speedX = -2;
             this.animation.onComplete = ()=>{
                 this.removeEffect("climb")
-                this.addEffect("getup")
+                this.addEffect("down")
                 this.speedY = 0;
                 this.speedX = 0;
             }
-        }else if (this.effets.includes("getup")){
-            this.animation.gotoAndPlay(0);
-            this.speedY = -0.2;
+        }else if (this.effets.includes("down") && this.speedX != 0){
+            this.switchAnim('getup');
+            this.speedY = -0.3;
+            this.speedX = 0;
+            this.removeEffect("down")
             this.animation.onComplete = ()=>{
-                this.removeEffect("getup")
                 this.speedY = 0;
+                console.log("cicle chute terminé", this.effets, this.getY());
+
+                //this.switchAnim('stand');
             }
+        }else if (this.effets.includes("getup")){
+            
         } else {
             if (this.speedX < 0 && this.animName != "walkLeft") {
                 this.switchAnim('walkLeft');
@@ -224,6 +230,12 @@ function initMainChar() {
         put.push(PIXI.Texture.fromFrame('put0' + i + '.png'));
     }
 
+    var getup = [];
+    for (var i = 1; i <= 4; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        getup.push(PIXI.Texture.fromFrame('climb0' + i + '.png'));
+    }
+
     var climb = [];
     for (var i = 1; i <= 4; i++) {
         // magically works since the spritesheet was loaded with the pixi loader
@@ -242,6 +254,7 @@ function initMainChar() {
     anims['push'] = pushAnim;
     anims['pushLeft'] = pushLeftAnim;
     anims['put'] = put;
+    anims['getup'] = getup;
     anims['climb'] = climb;
 
     var params = {
@@ -263,7 +276,11 @@ function initMainChar() {
                 loop: false
             },
             climb: {
-                speed: 0.02,
+                speed: 0.1,
+                loop: false
+            },
+            getup: {
+                speed: 0.05,
                 loop: false
             },
             catch: {

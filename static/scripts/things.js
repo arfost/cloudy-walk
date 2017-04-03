@@ -203,7 +203,7 @@ class Nuage extends Thing {
             //this.pos.x = charAttitude.x - this.sprite.width / 2;
 
         } else {
-            console.log("is free")
+            //console.log("is free")
             this.isFree = true;
         }
         if (!this.isFree) {
@@ -233,8 +233,10 @@ class Nuage extends Thing {
 
 class Colline extends Thing{
     turn(camPos, charAttitude){
-        if(this.pos.x < charAttitude.x){
+        if(this.pos.x +20< charAttitude.x){
             charAttitude.effets.push("climb")
+        }else if(this.pos.x < charAttitude.x) {
+            charAttitude.speedY = -(charAttitude.speedX)
         }
     }
 }
