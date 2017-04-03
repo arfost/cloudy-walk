@@ -66,6 +66,7 @@ class Coffre extends Thing {
         this.closed = this.sprite;
 
         this.opened = false;
+        this.boost = 0;
     }
 
     switchState() {
@@ -87,11 +88,16 @@ class Coffre extends Thing {
 
     offTurn(camPos, charAttitude) {
         if (charAttitude.etat == "push") {
-            console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
+            //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
             if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
                 //console.log("and i feel it")
                 this.pos.x += charAttitude.speedX;
             }
+        }
+
+        if(this.boost){
+            this.pos.x = this.pos.x +1.5
+            this.boost --;
         }
     }
 

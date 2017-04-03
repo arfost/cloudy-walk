@@ -17,6 +17,13 @@ function initWorld() {
     num0.press = function () {
         world.moveHill()
     };
+
+    var x = keyboard(87);
+    x.press = function () {
+        world.boostcoffer()
+    };
+
+    
 }
 
 class World {
@@ -55,6 +62,14 @@ class World {
                 }else{
                     thing.pos.x = 1200
                 }
+            }
+        }
+    }
+
+    boostcoffer(){
+        for(var thing of this.things){
+            if(thing.name == "coffre"){
+                thing.boost += 50;
             }
         }
     }

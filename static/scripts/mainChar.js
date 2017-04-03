@@ -95,7 +95,7 @@ class Entity {
                this.removeEffect("top")
                this.addEffect("tobogan")
                this.switchAnim("tobogan")
-               this.speedX = 2;
+               this.speedX = 4;
                 this.speedY = 2;
                 console.log("tobogan ",this.effets, this.effets.length)
            }
@@ -134,7 +134,9 @@ class Entity {
                 console.log("cicle montée terminé");
             }
         }else if (this.effets.includes("tobogan")){
-            this.speedX = 1.5;
+            if(this.speedX > 1){
+                this.speedX += -0.1
+            }
             console.log("test", this.getY())
            if(this.getY() >= 250){
                console.log("good")
