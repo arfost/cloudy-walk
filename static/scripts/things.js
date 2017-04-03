@@ -85,7 +85,7 @@ class Coffre extends Thing {
         this.stage.updateLayersOrder();
     }
 
-    offTurn(camPos, charAttitude){
+    offTurn(camPos, charAttitude) {
         if (charAttitude.etat == "push") {
             console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
             if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
@@ -111,7 +111,18 @@ class Coffre extends Thing {
                 charAttitude.newEffets.push("put")
             }
         } else if (this.opened) {
+            if (this.outCountDown) {
+                this.outCountDown--
+                //console.log("called ", this.outCountDown)
+            } else {
+                this.switchState();
+            }
+
+        }
+        if (charAttitude.etat == "out" && !this.opened) {
+            console.log("je dois m'ouvrir")
             this.switchState();
+            this.outCountDown = 100;
         }
         this.pos.x += deplacement.x;
         this.pos.y += deplacement.y;
@@ -154,11 +165,12 @@ class Nuage extends Thing {
         this.timeY = 40;
         this.vx = 1.5;
         this.vy = 1;
+        this.active = true;
     }
 
     offTurn(camPos, charAttitude) {
 
-        if (this.isFree) {
+        if (this.isFree && this.active) {
             var deplacement = {};
             deplacement.x = 0;
             deplacement.y = 0;
@@ -171,10 +183,10 @@ class Nuage extends Thing {
                 this.timeY--;
             }
 
-            if(this.pos.x + (this.sprite.width / 2)> charAttitude.x && !this.close){
+            if (this.pos.x + (this.sprite.width / 2) > charAttitude.x && !this.close) {
                 this.vx = -1.5
             }
-            if(this.pos.x + (this.sprite.width / 2)< charAttitude.x && !this.close){
+            if (this.pos.x + (this.sprite.width / 2) < charAttitude.x && !this.close) {
                 this.vx = 1.5
             }
             deplacement.x += this.vx;
@@ -182,6 +194,13 @@ class Nuage extends Thing {
 
             this.pos.x += deplacement.x;
             this.pos.y += deplacement.y;
+        }
+        console.log("nuage doit reapparaitre", charAttitude.etat == "pop" , this.pos.y == 5000)
+        if (charAttitude.etat == "pop" && this.pos.y == 5000) {
+            console.log("nuage doit reapparaitre")
+            this.pos.y = 200;
+            this.pos.x = charAttitude.x + 100;
+            this.active = false;
         }
 
     }
@@ -192,7 +211,7 @@ class Nuage extends Thing {
             if (charAttitude.x > this.pos.x + (this.sprite.width / 2) - 30 && charAttitude.x < this.pos.x + (this.sprite.width / 2) + 20) {
                 this.vx = -this.vx;
                 this.close = true;
-            }else{
+            } else {
                 this.close = false
             }
         }
@@ -216,8 +235,12 @@ class Nuage extends Thing {
             }
         }
         if (charAttitude.effets.includes("suppr")) {
-            this.pos.y += 5000
+            this.pos.y = 5000
         }
+        if (!this.active && this.pos.x == charAttitude.x) {
+            charAttitude.newEffets.push("cloudClimb")
+        }
+        
     }
 
     getBound() {
@@ -231,11 +254,11 @@ class Nuage extends Thing {
     }
 }
 
-class Colline extends Thing{
-    turn(camPos, charAttitude){
-        if(this.pos.x +20< charAttitude.x){
+class Colline extends Thing {
+    turn(camPos, charAttitude) {
+        if (this.pos.x + 20 < charAttitude.x) {
             charAttitude.newEffets.push("climb")
-        }else if(this.pos.x < charAttitude.x) {
+        } else if (this.pos.x < charAttitude.x) {
             charAttitude.speedY = -(charAttitude.speedX)
         }
     }

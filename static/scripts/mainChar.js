@@ -113,8 +113,23 @@ class Entity {
                 console.log("cicle chute terminé", this.effets, this.getY());
                 this.switchAnim('stand');
             }
-        }else if (this.effets.includes("getup")){
-            
+        }else if (this.effets.includes("cloudClimb")){
+            this.switchAnim("cloudClimb")
+            this.speedY = -5;
+            this.speedX = 1;
+            this.animation.onComplete = ()=>{
+                this.removeEffect("cloudClimb")
+                this.speedY = 0;
+                console.log("cicle montée terminé");
+                this.switchAnim('stand');
+            }
+        }else if (this.etat == "out"){
+            this.speedX = 0;
+            this.switchAnim("outCloud");
+            this.animation.onComplete = ()=>{
+                this.etat = "pop"
+                this.switchAnim('stand');
+            }
         } else {
             if (this.speedX < 0 && this.animName != "walkLeft") {
                 this.switchAnim('walkLeft');
@@ -243,6 +258,18 @@ function initMainChar() {
         climb.push(PIXI.Texture.fromFrame('climb0' + i + '.png'));
     }
 
+    var cloudClimb = [];
+    for (var i = 1; i <= 2; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        cloudClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
+    }
+
+    var outCloud = [];
+    for (var i = 1; i <= 3; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        outCloud.push(PIXI.Texture.fromFrame('cloud_out0' + i + '.png'));
+    }
+
     var lookup = [PIXI.Texture.fromFrame('lookup.png')];
 
     var anims = {};
@@ -257,6 +284,8 @@ function initMainChar() {
     anims['put'] = put;
     anims['getup'] = getup;
     anims['climb'] = climb;
+    anims['cloudClimb'] = cloudClimb;
+    anims['outCloud'] = outCloud;
 
     var params = {
         y: 250,
@@ -286,6 +315,18 @@ function initMainChar() {
                 speed: 0.05,
                 loop: false
             },
+            outCloud: {
+                width: 115,
+                height: 230,
+                speed: 0.05,
+                loop: false
+            },
+            cloudClimb: {
+                width: 115,
+                height: 245,
+                speed: 0.05,
+                loop: false
+            },
             catch: {
                 speed: 0.08,
                 loop: false
@@ -303,8 +344,16 @@ function initMainChar() {
     var left = keyboard(37);
     var up = keyboard(38);
     var down = keyboard(40);
+    var space = keyboard(32);
 
     var ctrl = keyboard(17);
+
+    space.press = function () {
+        entity.etat = "out";
+    };
+    space.release = function () {
+        entity.etat = ""
+    };
 
     right.press = function () {
         entity.speedX = 1;

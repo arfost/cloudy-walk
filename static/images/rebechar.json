@@ -352,6 +352,48 @@
 	"sourceSize": {"w":145,"h":332}
 },
 
+"cloud_climb01.png":
+{
+	"frame": {"x":1560,"y":780,"w":158,"h":295},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":295},
+	"sourceSize": {"w":158,"h":295}
+},
+"cloud_climb02.png":
+{
+	"frame": {"x":1718,"y":780,"w":158,"h":295},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":295},
+	"sourceSize": {"w":158,"h":295}
+},
+
+"cloud_out01.png":
+{
+	"frame": {"x":1556,"y":1091,"w":95,"h":177},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":177},
+	"sourceSize": {"w":95,"h":177}
+},
+"cloud_out02.png":
+{
+	"frame": {"x":1653,"y":1088,"w":81,"h":182},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":81,"h":182},
+	"sourceSize": {"w":81,"h":182}
+},
+"cloud_out03.png":
+{
+	"frame": {"x":1730,"y":1090,"w":81,"h":182},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":81,"h":182},
+	"sourceSize": {"w":81,"h":182}
+},
+
 "coffre.png":
 {
 	"frame": {"x":250,"y":305,"w":130,"h":95},
