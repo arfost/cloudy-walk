@@ -91,6 +91,23 @@ class Entity {
             }
         } else if (this.etat == "lookup" && this.speedX == 0){
             this.switchAnim('lookup');
+        }else if (this.effets.includes("climb")){
+            this.switchAnim('climb');
+            this.speedY = 0.2;
+            this.speedX = -0.5;
+            this.animation.onComplete = ()=>{
+                this.removeEffect("climb")
+                this.addEffect("getup")
+                this.speedY = 0;
+                this.speedX = 0;
+            }
+        }else if (this.effets.includes("getup")){
+            this.animation.gotoAndPlay(0);
+            this.speedY = -0.2;
+            this.animation.onComplete = ()=>{
+                this.removeEffect("getup")
+                this.speedY = 0;
+            }
         } else {
             if (this.speedX < 0 && this.animName != "walkLeft") {
                 this.switchAnim('walkLeft');
@@ -207,6 +224,12 @@ function initMainChar() {
         put.push(PIXI.Texture.fromFrame('put0' + i + '.png'));
     }
 
+    var climb = [];
+    for (var i = 1; i <= 4; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        climb.push(PIXI.Texture.fromFrame('climb0' + i + '.png'));
+    }
+
     var lookup = [PIXI.Texture.fromFrame('lookup.png')];
 
     var anims = {};
@@ -219,6 +242,7 @@ function initMainChar() {
     anims['push'] = pushAnim;
     anims['pushLeft'] = pushLeftAnim;
     anims['put'] = put;
+    anims['climb'] = climb;
 
     var params = {
         y: 250,
@@ -236,6 +260,10 @@ function initMainChar() {
                 width: 135,
                 height: 260,
                 speed: 0.05,
+                loop: false
+            },
+            climb: {
+                speed: 0.02,
                 loop: false
             },
             catch: {

@@ -261,9 +261,6 @@
 	"sourceSize": {"w":195,"h":265}
 },
 
-
-
-
 "put01.png":
 {
 	"frame": {"x":975,"y":715,"w":95,"h":220},
@@ -295,6 +292,39 @@
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":125,"h":220},
 	"sourceSize": {"w":125,"h":220}
+},
+
+"climb01.png":
+{
+	"frame": {"x":1565,"y":0,"w":160,"h":290},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":95,"h":290},
+	"sourceSize": {"w":95,"h":290}
+},
+"climb02.png":
+{
+	"frame": {"x":1725,"y":0,"w":160,"h":290},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":290},
+	"sourceSize": {"w":160,"h":290}
+},
+"climb03.png":
+{
+	"frame": {"x":1565,"y":290,"w":160,"h":230},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":230},
+	"sourceSize": {"w":160,"h":230}
+},
+"climb04.png":
+{
+	"frame": {"x":1725,"y":290,"w":160,"h":215},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":215},
+	"sourceSize": {"w":160,"h":215}
 },
 
 "coffre.png":

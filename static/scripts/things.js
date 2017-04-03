@@ -232,5 +232,9 @@ class Nuage extends Thing {
 }
 
 class Colline extends Thing{
-
+    turn(camPos, charAttitude){
+        if(this.pos.x < charAttitude.x){
+            charAttitude.effets.push("climb")
+        }
+    }
 }
