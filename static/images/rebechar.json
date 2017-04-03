@@ -357,16 +357,48 @@
 	"frame": {"x":1560,"y":780,"w":158,"h":295},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":295},
-	"sourceSize": {"w":158,"h":295}
+	"spriteSourceSize": {"x":0,"y":0,"w":127,"h":245},
+	"sourceSize": {"w":158,"h":245}
 },
 "cloud_climb02.png":
 {
-	"frame": {"x":1718,"y":780,"w":158,"h":295},
+	"frame": {"x":1718,"y":840,"w":158,"h":245},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":158,"h":295},
-	"sourceSize": {"w":158,"h":295}
+	"spriteSourceSize": {"x":0,"y":0,"w":127,"h":205},
+	"sourceSize": {"w":158,"h":245}
+},
+"cloud_climb03.png":
+{
+	"frame": {"x":1756,"y":665,"w":110,"h":167},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":110,"h":167},
+	"sourceSize": {"w":110,"h":167}
+},
+"cloud_climb04.png":
+{
+	"frame": {"x":1868,"y":665,"w":110,"h":167},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":110,"h":167},
+	"sourceSize": {"w":110,"h":167}
+},
+"cloud_climb05.png":
+{
+	"frame": {"x":1877,"y":861,"w":117,"h":197},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":197},
+	"sourceSize": {"w":117,"h":197}
+},
+"cloud_climb06.png":
+{
+	"frame": {"x":1888,"y":457,"w":126,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":126,"h":200},
+	"sourceSize": {"w":126,"h":200}
 },
 
 "cloud_out01.png":
@@ -392,6 +424,14 @@
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":81,"h":182},
 	"sourceSize": {"w":81,"h":182}
+},
+"tobogan.png":
+{
+	"frame": {"x":1874,"y":194,"w":113,"h":248},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":113,"h":248},
+	"sourceSize": {"w":113,"h":248}
 },
 
 "coffre.png":

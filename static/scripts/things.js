@@ -195,11 +195,15 @@ class Nuage extends Thing {
             this.pos.x += deplacement.x;
             this.pos.y += deplacement.y;
         }
-        console.log("nuage doit reapparaitre", charAttitude.etat == "pop" , this.pos.y == 5000)
-        if (charAttitude.etat == "pop" && this.pos.y == 5000) {
-            console.log("nuage doit reapparaitre")
+        //console.log("nuage doit reapparaitre", charAttitude.etat == "pop" , this.pos.y == 5000)
+        if (charAttitude.etat == "pop" ) {
+            console.log("nuage doit reapparaitre,", charAttitude.x + 100)
             this.pos.y = 200;
-            this.pos.x = charAttitude.x + 100;
+            if(charAttitude.x < 800){
+                this.pos.x = 276;
+            }else{
+                this.pos.x = 1076;
+            }
             this.active = false;
         }
 
@@ -256,9 +260,13 @@ class Nuage extends Thing {
 
 class Colline extends Thing {
     turn(camPos, charAttitude) {
-        if (this.pos.x + 20 < charAttitude.x) {
+        if (charAttitude.effets.includes("top")) {
+            //console.log("put to top")
+            //charAttitude.x = this.pos.x + this.width/2
+            //charAttitude.y = this.pos.y + 100;
+        } else if (this.pos.x + 20 < charAttitude.x && charAttitude.x > this.pos.x -5 + this.width/2 ) {
             charAttitude.newEffets.push("climb")
-        } else if (this.pos.x < charAttitude.x) {
+        } else if (this.pos.x < charAttitude.x && charAttitude.x > this.pos.x -5 + this.width/2) {
             charAttitude.speedY = -(charAttitude.speedX)
         }
     }

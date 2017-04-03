@@ -54,7 +54,7 @@ class Entity {
     addEffect(effet){
         if(this.effets.includes(effet))
             return
-        
+        console.log("new effet", effet)
         this.effets.push(effet)
     }
     removeEffect(effet){
@@ -89,7 +89,17 @@ class Entity {
                 this.addEffect("catch")
                 //this.etat = "lookup"
             }
-        } else if (this.etat == "lookup" && this.speedX == 0){
+        }else if (this.effets.includes("top")){
+           this.speedX = 0;
+           if(this.etat == "lookup"){
+               this.removeEffect("top")
+               this.addEffect("tobogan")
+               this.switchAnim("tobogan")
+               this.speedX = 2;
+                this.speedY = 2;
+                console.log("tobogan ",this.effets, this.effets.length)
+           }
+        }else if (this.etat == "lookup" && this.speedX == 0){
             this.switchAnim('lookup');
         }else if (this.effets.includes("climb")){
             this.switchAnim('climb');
@@ -115,14 +125,24 @@ class Entity {
             }
         }else if (this.effets.includes("cloudClimb")){
             this.switchAnim("cloudClimb")
-            this.speedY = -5;
-            this.speedX = 1;
+            this.speedY = -2;
+            this.speedX = 2.5;
             this.animation.onComplete = ()=>{
                 this.removeEffect("cloudClimb")
+                this.addEffect("top")
                 this.speedY = 0;
                 console.log("cicle montée terminé");
-                this.switchAnim('stand');
             }
+        }else if (this.effets.includes("tobogan")){
+            this.speedX = 1.5;
+            console.log("test", this.getY())
+           if(this.getY() >= 250){
+               console.log("good")
+               this.speedY = 0;
+               this.speedX = 0;
+               this.removeEffect("tobogan")
+               this.switchAnim('stand');
+           }
         }else if (this.etat == "out"){
             this.speedX = 0;
             this.switchAnim("outCloud");
@@ -259,7 +279,7 @@ function initMainChar() {
     }
 
     var cloudClimb = [];
-    for (var i = 1; i <= 2; i++) {
+    for (var i = 1; i <= 6; i++) {
         // magically works since the spritesheet was loaded with the pixi loader
         cloudClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
     }
@@ -271,6 +291,7 @@ function initMainChar() {
     }
 
     var lookup = [PIXI.Texture.fromFrame('lookup.png')];
+    var tobogan = [PIXI.Texture.fromFrame('tobogan.png')];
 
     var anims = {};
     anims['walkLeft'] = walkLeft;
@@ -286,6 +307,7 @@ function initMainChar() {
     anims['climb'] = climb;
     anims['cloudClimb'] = cloudClimb;
     anims['outCloud'] = outCloud;
+    anims['tobogan'] = tobogan;
 
     var params = {
         y: 250,
