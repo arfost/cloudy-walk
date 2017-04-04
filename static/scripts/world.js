@@ -31,14 +31,15 @@ class World {
 
         this.layers = [];
 
-        this.layers.push(new Layer(stage, 'far_back', { x: 800, y: 600, posX: 0, posY: 0, zIndex: 5 }, 0.128));
-        this.layers.push(new Layer(stage, 'medium_back', { x: 800, y: 200, posX: 0, posY: 200, zIndex: 4 }, 1));
+        this.layers.push(new Layer(stage, 'sky', { x: 4204, y: 438, posX: 0, posY: 0, zIndex: 6 }, 0.256));
+        this.layers.push(new Layer(stage, 'far_back', { x: 4604, y: 600, posX: 0, posY: 0, zIndex: 5 }, 0.512));
+        this.layers.push(new Layer(stage, 'medium_back', { x: 4604, y: 200, posX: 0, posY: 250, zIndex: 4 }, 1));
 
         this.things = [];
 
-        this.things.push(new Thing(stage, { x: 900, y: 75, zIndex: 3 }, 'arbre', { width: 227, height: 343 }))
+        this.things.push(new Thing(stage, { x: 900, y: 25, zIndex: 3 }, 'arbre', { width: 227, height: 343 }))
         this.things.push(new Colline(stage, { x: 1900, y: 25, zIndex: 3 }, 'colline', { width: 335, height: 425 }))
-        this.things.push(new Coffre(stage, { x: -200, y: 220, zIndex: 3 }, 'coffre', { width: 195, height: 142 }))
+        this.things.push(new Coffre(stage, { x: -200, y: 220, zIndex: 3 }, 'coffre', { width: 155, height: 112 }))
         this.things.push(new Nuage(stage, { x: -300, y: 50, zIndex: 1 }, 'nuage', { width: 130, height: 95 }))
 
         this.camPos = {
@@ -120,6 +121,6 @@ class Layer {
 
     play(camPos) {
         this.tile.tilePosition.x -= (camPos.deltaX * this.offset)
-        this.tile.tilePosition.y -= (camPos.deltaY * this.offset)
+        //this.tile.tilePosition.y -= (camPos.deltaY * this.offset)
     }
 }

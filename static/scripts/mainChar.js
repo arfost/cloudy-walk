@@ -338,9 +338,9 @@ function initMainChar() {
                 loop: false
             },
             getup: {
-                width: 115,
-                height: 230,
-                speed: 0.05,
+                width: 95,
+                height: 210,
+                speed: 0.1,
                 loop: false
             },
             outCloud: {
@@ -350,8 +350,8 @@ function initMainChar() {
                 loop: false
             },
             cloudClimb: {
-                width: 115,
-                height: 245,
+                width: 155,
+                height: 305,
                 speed: 0.03,
                 loop: false
             },
