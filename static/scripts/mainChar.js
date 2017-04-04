@@ -5,10 +5,10 @@ class Entity {
             this.animations[anim] = new PIXI.extras.MovieClip(anims[anim]);
             this.animations[anim].anchor.set(0.5);
             this.animations[anim].animationSpeed = params.anims[anim] && params.anims[anim].speed ? params.anims[anim].speed : 0.2;
-            if(params.anims[anim] && params.anims[anim].width !== undefined){
+            if (params.anims[anim] && params.anims[anim].width !== undefined) {
                 this.animations[anim].width = params.anims[anim].width
             }
-            if(params.anims[anim] && params.anims[anim].height !== undefined){
+            if (params.anims[anim] && params.anims[anim].height !== undefined) {
                 this.animations[anim].height = params.anims[anim].height
             }
             this.animations[anim].zIndex = params.zIndex ? params.zIndex : 1;
@@ -51,13 +51,13 @@ class Entity {
     setspeedY(speedY) {
         this.speedY = speedY;
     }
-    addEffect(effet){
-        if(this.effets.includes(effet))
+    addEffect(effet) {
+        if (this.effets.includes(effet))
             return
         console.log("new effet", effet)
         this.effets.push(effet)
     }
-    removeEffect(effet){
+    removeEffect(effet) {
         this.effets.splice(entity.effets.indexOf(effet, 1))
     }
     play(camPos, charPos) {
@@ -74,81 +74,85 @@ class Entity {
             } else if (this.speedX == 0 && this.animName == "pushLeft") {
                 this.switchAnim('standLeft');
             }
-        } else if (this.effets.includes("put") && !this.animation.playing){
+        } else if (this.effets.includes("put") && !this.animation.playing) {
             this.speedX = 0;
             this.switchAnim('put');
             this.removeEffect("catch")
-            this.animation.onComplete = ()=>{
-                
+            this.animation.onComplete = () => {
+
                 this.addEffect("suppr")
             }
-        }else if (this.etat == "catch" && !this.effets.includes("put")){
+        } else if (this.etat == "catch" && !this.effets.includes("put")) {
             this.speedX = 0;
             this.switchAnim('catch');
-            this.animation.onComplete = ()=>{
+            this.animation.onComplete = () => {
                 this.addEffect("catch")
                 //this.etat = "lookup"
             }
-        }else if (this.effets.includes("top")){
-           this.speedX = 0;
-           if(this.etat == "lookup"){
-               this.removeEffect("top")
-               this.addEffect("tobogan")
-               this.switchAnim("tobogan")
-               this.speedX = 4;
+        } else if (this.effets.includes("top")) {
+            this.speedX = 0;
+            if (this.etat == "lookup") {
+                this.removeEffect("top")
+                this.addEffect("tobogan")
+                this.switchAnim("tobogan")
+                this.speedX = 3;
                 this.speedY = 2;
-                console.log("tobogan ",this.effets, this.effets.length)
-           }
-        }else if (this.etat == "lookup" && this.speedX == 0){
+                console.log("tobogan ", this.effets, this.effets.length)
+            }
+        } else if (this.etat == "lookup" && this.speedX == 0) {
             this.switchAnim('lookup');
-        }else if (this.effets.includes("climb")){
+        } else if (this.effets.includes("climb")) {
             this.switchAnim('climb');
             this.speedY = 1;
             this.speedX = -2;
-            this.animation.onComplete = ()=>{
+            this.animation.onComplete = () => {
                 this.removeEffect("climb")
                 //console.log("called again")
                 this.addEffect("down")
                 this.speedY = 0;
                 this.speedX = 0;
             }
-        }else if (this.effets.includes("down") && this.speedX != 0){
+        } else if (this.effets.includes("down") && this.speedX != 0) {
             this.switchAnim('getup');
             this.speedY = -0.5;
             this.speedX = 0;
             //console.log("pre remove effect", this.effets.length, this.getY());
             this.removeEffect("down")
-            this.animation.onComplete = ()=>{
+            this.animation.onComplete = () => {
                 this.speedY = 0;
+                this.y = 250;
                 console.log("cicle chute terminé", this.effets, this.getY());
                 this.switchAnim('stand');
             }
-        }else if (this.effets.includes("cloudClimb")){
+        } else if (this.effets.includes("cloudClimb")) {
             this.switchAnim("cloudClimb")
-            this.speedY = -2;
-            this.speedX = 2.5;
-            this.animation.onComplete = ()=>{
+            this.speedY = -1.2;
+            this.speedX = 1.5;
+            this.animation.onComplete = () => {
                 this.removeEffect("cloudClimb")
                 this.addEffect("top")
                 this.speedY = 0;
+                this.speedX = 0;
                 console.log("cicle montée terminé");
             }
-        }else if (this.effets.includes("tobogan")){
-            if(this.speedX > 1){
+        } else if (this.effets.includes("tobogan")) {
+            if (this.speedX > 1) {
                 this.speedX += -0.1
             }
             console.log("test", this.getY())
-           if(this.getY() >= 250){
-               console.log("good")
-               this.speedY = 0;
-               this.speedX = 0;
-               this.removeEffect("tobogan")
-               this.switchAnim('stand');
-           }
-        }else if (this.etat == "out"){
+            if (this.getY() >= 273) {
+                console.log("good")
+                this.speedY = 0;
+                this.speedX = 0;
+                this.removeEffect("tobogan")
+                this.addEffect("down")
+                this.switchAnim('climb');
+                this.animation.gotoAndStop(this.animation.textures.length - 1)
+            }
+        } else if (this.etat == "out") {
             this.speedX = 0;
             this.switchAnim("outCloud");
-            this.animation.onComplete = ()=>{
+            this.animation.onComplete = () => {
                 this.etat = "pop"
                 this.switchAnim('stand');
             }
@@ -167,7 +171,7 @@ class Entity {
         this.x = charPos.x;
         this.setScreenY(charPos.y - (camPos.y - camPos.boundaryY));
         this.y = charPos.y;
-        for(var effet of charPos.effets){
+        for (var effet of charPos.effets) {
             this.addEffect(effet);
         }
     }
@@ -212,7 +216,7 @@ class Entity {
             speedX: this.getspeedX(),
             speedY: this.getspeedY(),
             etat: this.etat,
-            effets:JSON.parse(JSON.stringify(this.effets))
+            effets: JSON.parse(JSON.stringify(this.effets))
         }
     }
 }
@@ -348,7 +352,7 @@ function initMainChar() {
             cloudClimb: {
                 width: 115,
                 height: 245,
-                speed: 0.05,
+                speed: 0.03,
                 loop: false
             },
             catch: {
@@ -370,7 +374,7 @@ function initMainChar() {
     var down = keyboard(40);
     var space = keyboard(32);
 
-    var ctrl = keyboard(17);
+    var ctrl = keyboard(91);
 
     space.press = function () {
         entity.etat = "out";

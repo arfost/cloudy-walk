@@ -13,7 +13,7 @@ function initWorld() {
         world.locked = true;
     };
 
-    var num0 = keyboard(96);
+    var num0 = keyboard(18);
     num0.press = function () {
         world.moveHill()
     };
@@ -37,7 +37,7 @@ class World {
         this.things = [];
 
         this.things.push(new Thing(stage, { x: 900, y: 75, zIndex: 3 }, 'arbre', { width: 227, height: 343 }))
-        this.things.push(new Colline(stage, { x: 1200, y: 25, zIndex: 3 }, 'colline', { width: 335, height: 425 }))
+        this.things.push(new Colline(stage, { x: 1900, y: 25, zIndex: 3 }, 'colline', { width: 335, height: 425 }))
         this.things.push(new Coffre(stage, { x: -200, y: 220, zIndex: 3 }, 'coffre', { width: 195, height: 142 }))
         this.things.push(new Nuage(stage, { x: -300, y: 50, zIndex: 1 }, 'nuage', { width: 130, height: 95 }))
 
@@ -57,10 +57,10 @@ class World {
     moveHill(){
         for(var thing of this.things){
             if(thing.name == "colline"){
-                if(thing.pos.x == 1200){
+                if(thing.pos.x == 1900){
                     thing.pos.x = 400
                 }else{
-                    thing.pos.x = 1200
+                    thing.pos.x = 1900
                 }
             }
         }

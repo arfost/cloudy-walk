@@ -206,9 +206,9 @@ class Nuage extends Thing {
             console.log("nuage doit reapparaitre,", charAttitude.x + 100)
             this.pos.y = 200;
             if(charAttitude.x < 800){
-                this.pos.x = 276;
+                this.pos.x = 296;
             }else{
-                this.pos.x = 1076;
+                this.pos.x = 1796;
             }
             this.active = false;
         }
@@ -266,13 +266,12 @@ class Nuage extends Thing {
 
 class Colline extends Thing {
     turn(camPos, charAttitude) {
-        if (charAttitude.effets.includes("top")) {
-            //console.log("put to top")
-            //charAttitude.x = this.pos.x + this.width/2
-            //charAttitude.y = this.pos.y + 100;
-        } else if (this.pos.x + 20 < charAttitude.x && charAttitude.x > this.pos.x -5 + this.width/2 ) {
+        console.log(this.pos.x, charAttitude.x, this.pos.x < charAttitude.x, this.pos.x -5 + this.sprite.width/2 > charAttitude.x)
+        if (this.pos.x + 20 < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && !charAttitude.effets.includes("cloudClimb") && !charAttitude.effets.includes("top")) {
+            console.log("et je tombe")
             charAttitude.newEffets.push("climb")
-        } else if (this.pos.x < charAttitude.x && charAttitude.x > this.pos.x -5 + this.width/2) {
+        } else if (this.pos.x < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && !charAttitude.effets.includes("cloudClimb") && !charAttitude.effets.includes("top")) {
+            console.log("j'approche")
             charAttitude.speedY = -(charAttitude.speedX)
         }
     }
