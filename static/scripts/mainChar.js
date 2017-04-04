@@ -374,7 +374,7 @@ function initMainChar() {
     var down = keyboard(40);
     var space = keyboard(32);
 
-    var ctrl = keyboard(91);
+    var ctrl = keyboard(17);
 
     space.press = function () {
         entity.etat = "out";
