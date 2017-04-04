@@ -153,7 +153,7 @@ class Coffre extends Thing {
         hit = false;
 
         if (
-            (r1.x == r2.x && direction == -1) || (r1.x == r2.x + r2.width && direction == 1)
+            (r1.x > r2.x-5 && r1.x < r2.x +5 && direction == -1) || (r1.x > r2.x + r2.width-5&&r1.x < r2.x + r2.width +5 && direction == 1)
         ) {
             hit = true;
         }
