@@ -96,7 +96,7 @@ class Entity {
                 this.addEffect("tobogan")
                 this.switchAnim("tobogan")
                 this.speedX = 3;
-                this.speedY = 2;
+                this.speedY = 4;
                 console.log("tobogan ", this.effets, this.effets.length)
             }
         } else if (this.etat == "lookup" && this.speedX == 0) {
@@ -125,22 +125,41 @@ class Entity {
                 this.switchAnim('stand');
             }
         } else if (this.effets.includes("cloudClimb")) {
-            this.switchAnim("cloudClimb")
-            this.speedY = -1.2;
-            this.speedX = 1.5;
+            if(this.getY()<-10){
+                this.speedY = 0;
+            }else if(this.getX()>590){
+                this.speedX = 0;
+            }else if(this.getX()>492){
+                this.speedX = 1.5;
+                this.speedY = -1.5;
+            }else if(this.getX()>464){
+                this.speedX = 1;
+                this.speedY = -1;
+            }else if(this.getX()>356){
+                this.speedX = 5;
+                this.speedY = -1.5;
+            }else{
+                this.switchAnim("cloudClimb")
+            
+                this.speedY = -2.5;
+                this.speedX = 1;
+            }
+            
             this.animation.onComplete = () => {
                 this.removeEffect("cloudClimb")
                 this.addEffect("top")
+                this.y = -10
+                this.x = 590
                 this.speedY = 0;
                 this.speedX = 0;
-                console.log("cicle montée terminé");
+                console.log("cicle montée terminé", this.getX(), this.getY());
             }
         } else if (this.effets.includes("tobogan")) {
-            if (this.speedX > 1) {
+            if (this.speedX > 1.5) {
                 this.speedX += -0.1
             }
             console.log("test", this.getY())
-            if (this.getY() >= 273) {
+            if (this.getY() >= 303) {
                 console.log("good")
                 this.speedY = 0;
                 this.speedX = 0;
@@ -334,7 +353,9 @@ function initMainChar() {
                 loop: false
             },
             climb: {
-                speed: 0.1,
+                width: 155,
+                height: 290,
+                speed: 0.2,
                 loop: false
             },
             getup: {
