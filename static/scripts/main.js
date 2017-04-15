@@ -1,5 +1,14 @@
 function onAssetsLoaded() {
 
+    stage.updateLayersOrder = function () {
+        //console.log(this.children)
+        this.children.sort(function (a, b) {
+            a.zIndex = a.zIndex || 0;
+            b.zIndex = b.zIndex || 0;
+            return b.zIndex - a.zIndex
+        });
+    };
+
     initWorld();
     initMainChar();
 
@@ -13,15 +22,7 @@ function onAssetsLoaded() {
 
     //stage.addChild(nuage);
 
-    stage.updateLayersOrder = function () {
-        //console.log(this.children)
-        this.children.sort(function (a, b) {
-            a.zIndex = a.zIndex || 0;
-            b.zIndex = b.zIndex || 0;
-            return b.zIndex - a.zIndex
-        });
-    };
-    stage.updateLayersOrder();
+    
     renderer.render(stage);
 
     requestAnimationFrame(animate);

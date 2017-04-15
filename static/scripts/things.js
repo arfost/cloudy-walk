@@ -87,13 +87,16 @@ class Coffre extends Thing {
     }
 
     offTurn(camPos, charAttitude) {
-        if (charAttitude.etat == "push") {
-            //console.log("i see him push : ", charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound()))
-            if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
-                //console.log("and i feel it")
-                this.pos.x += charAttitude.speedX;
-            }
+        if (charAttitude.etat.includes("push")) {
+            console.log("i see him push : ",charAttitude.speedX, charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX))
+            
+            this.pos.x += charAttitude.speedX;
         }
+        //console.log("test test : ", this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX))
+        if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
+                console.log("and i feel it")
+                charAttitude.effets.push('near_coffer')
+            }
 
         if(this.boost){
             this.pos.x = this.pos.x +1
@@ -107,29 +110,8 @@ class Coffre extends Thing {
         deplacement.y = 0;
 
         this.offTurn(camPos, charAttitude)
-
-        if (charAttitude.etat == "catch") {
-            if (!this.opened) {
-                this.switchState();
-            }
-            if (charAttitude.effets.includes("catched") && Math.abs(this.pos.x - charAttitude.x + 150) < 100) {
-                console.log("and i put")
-                charAttitude.newEffets.push("put")
-            }
-        } else if (this.opened) {
-            if (this.outCountDown) {
-                this.outCountDown--
-                //console.log("called ", this.outCountDown)
-            } else {
-                this.switchState();
-            }
-
-        }
-        if (charAttitude.etat == "out" && !this.opened) {
-            console.log("je dois m'ouvrir")
-            this.switchState();
-            this.outCountDown = 100;
-        }
+        
+        
         this.pos.x += deplacement.x;
         this.pos.y += deplacement.y;
     }
@@ -153,7 +135,7 @@ class Coffre extends Thing {
         hit = false;
 
         if (
-            (r1.x > r2.x-5 && r1.x < r2.x +5 && direction == -1) || (r1.x > r2.x + r2.width-5&&r1.x < r2.x + r2.width +5 && direction == 1)
+            (r1.x > r2.x-5 && r1.x < r2.x +5 && direction < 0) || (r1.x > r2.x + r2.width-5&&r1.x < r2.x + r2.width +5 && direction > 0)
         ) {
             hit = true;
         }
@@ -189,10 +171,10 @@ class Nuage extends Thing {
                 this.timeY--;
             }
 
-            if (this.pos.x + (this.sprite.width / 2) > charAttitude.x && !this.close) {
+            if (this.pos.x + (this.sprite.width / 2)-40 > charAttitude.x && this.close) {
                 this.vx = -1.5
             }
-            if (this.pos.x + (this.sprite.width / 2) < charAttitude.x && !this.close) {
+            if (this.pos.x + (this.sprite.width / 2)+40 < charAttitude.x && this.close) {
                 this.vx = 1.5
             }
             deplacement.x += this.vx;
@@ -202,53 +184,33 @@ class Nuage extends Thing {
             this.pos.y += deplacement.y;
         }
         //console.log("nuage doit reapparaitre", charAttitude.etat == "pop" , this.pos.y == 5000)
-        if (charAttitude.etat == "pop" ) {
-            console.log("nuage doit reapparaitre,", charAttitude.x + 100)
-            this.pos.y = 200;
-            if(charAttitude.x < 800){
-                this.pos.x = 296;
-            }else{
-                this.pos.x = 1796;
-            }
-            this.active = false;
-        }
+        
 
     }
 
     turn(camPos, charAttitude) {
         this.offTurn(camPos, charAttitude);
-        if (!charAttitude.effets.includes("put")) {
-            if (charAttitude.x > this.pos.x + (this.sprite.width / 2) - 30 && charAttitude.x < this.pos.x + (this.sprite.width / 2) + 20) {
-                this.vx = -this.vx;
-                this.close = true;
-            } else {
-                this.close = false
-            }
+        //console.log("test : ", this.pos.x + (this.sprite.width / 2) +50 >charAttitude.x , this.pos.x + (this.sprite.width /2) -50 < charAttitude.x)
+        if(this.pos.x + (this.sprite.width / 2) +50 >charAttitude.x && this.pos.x + (this.sprite.width /2) -50 < charAttitude.x){
+            this.close = true;
+            charAttitude.effets.push("slow")
         }
-
-
-        if (charAttitude.effets.includes("catch") && this.close && this.isFree) {
+        if(charAttitude.etat == "catch" && this.close){
             this.isFree = false;
-            //this.pos.x = charAttitude.x - this.sprite.width / 2;
-
-        } else {
-            //console.log("is free")
-            this.isFree = true;
-        }
-        if (!this.isFree) {
-
-            if (charAttitude.effets.includes("put")) {
-                this.pos.y += 5
-                this.pos.x += -2.5
-            } else {
-                charAttitude.newEffets.push("catched");
+            if(this.pos.x + (this.sprite.width / 2)< charAttitude.x){
+                this.pos.x += 1;
             }
-        }
-        if (charAttitude.effets.includes("suppr")) {
-            this.pos.y = 5000
-        }
-        if (!this.active && this.pos.x == charAttitude.x) {
-            charAttitude.newEffets.push("cloudClimb")
+            if(this.pos.x + (this.sprite.width / 2)> charAttitude.x){
+                this.pos.x += -1;
+            }
+            if(this.pos.y < charAttitude.y-200){
+                this.pos.y += 1;
+            }
+            if(this.pos.y > charAttitude.y-200){
+                this.pos.y += -1;
+            }
+        }else{
+            this.isFree = true;
         }
         
     }
@@ -269,7 +231,7 @@ class Colline extends Thing {
         //console.log(this.pos.x, charAttitude.x, this.pos.x < charAttitude.x, this.pos.x -5 + this.sprite.width/2 > charAttitude.x)
         if (this.pos.x + 20 < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && !charAttitude.effets.includes("cloudClimb") && !charAttitude.effets.includes("top")) {
             //console.log("et je tombe")
-            charAttitude.newEffets.push("climb")
+            charAttitude.effets.push("climb")
         } else if (this.pos.x < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && !charAttitude.effets.includes("cloudClimb") && !charAttitude.effets.includes("top")) {
             //console.log("j'approche")
             charAttitude.speedY = -(charAttitude.speedX)
