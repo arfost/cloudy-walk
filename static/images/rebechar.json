@@ -329,27 +329,27 @@
 
 "getup01.png":
 {
-	"frame": {"x":1578,"y":512,"w":192,"h":245},
+	"frame": {"x":1585,"y":501,"w":146,"h":190},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":192,"h":245},
-	"sourceSize": {"w":192,"h":245}
+	"spriteSourceSize": {"x":0,"y":0,"w":146,"h":190},
+	"sourceSize": {"w":146,"h":190}
 },
 "getup02.png":
 {
-	"frame": {"x":1405,"y":672,"w":171,"h":276},
+	"frame": {"x":1453,"y":715,"w":126,"h":237},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":171,"h":276},
-	"sourceSize": {"w":171,"h":276}
+	"spriteSourceSize": {"x":0,"y":0,"w":126,"h":237},
+	"sourceSize": {"w":126,"h":237}
 },
 "getup03.png":
 {
-	"frame": {"x":1403,"y":328,"w":145,"h":332},
+	"frame": {"x":1391,"y":421,"w":138,"h":277},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":145,"h":332},
-	"sourceSize": {"w":145,"h":332}
+	"spriteSourceSize": {"x":0,"y":0,"w":138,"h":277},
+	"sourceSize": {"w":138,"h":277}
 },
 
 "cloud_climb01.png":
