@@ -7,6 +7,8 @@ class Thing {
         this.sprite = new PIXI.Sprite(PIXI.Texture.fromFrame(img + '.png'));
         this.sprite.width = size.width;
         this.sprite.height = size.height;
+        this.offsetWidth = this.sprite.scale.x;
+        this.offsetHeight = this.sprite.scale.y;
         this.sprite.zIndex = pos.zIndex;
         this.isAdded = false;
     }
@@ -17,14 +19,16 @@ class Thing {
             ((camPos.y - camPos.boundaryY) < this.pos.y + this.sprite.height && (camPos.y + camPos.boundaryY) > this.pos.y)) {
             if (!this.isAdded) {
                 this._addSelf(camPos)
-                this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
-                this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
+                this.sprite.x = (this.pos.x - (camPos.x - camPos.boundaryX))*camPos.scale
+                this.sprite.y = (this.pos.y - (camPos.y - camPos.boundaryY))*camPos.scale
             } else {
 
                 this.turn(camPos, charAttitude);
 
                 this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
                 this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
+                this.sprite.scale.x = camPos.scale * this.offsetWidth;
+                this.sprite.scale.y = camPos.scale * this.offsetHeight;
             }
         } else {
             if (this.isAdded) {
@@ -114,7 +118,7 @@ class Coffre extends Thing {
 
         this.offTurn(camPos, charAttitude)
 
-        if (charAttitude.effets.includes("near_coffer_put") && charAttitude.etat == "catch" && charAttitude.frameState.current == charAttitude.frameState.total -1) {
+        if (charAttitude.effets.includes("near_coffer_put") && charAttitude.etat == "catch" && charAttitude.animFinished) {
             this.switchState();
             charAttitude.etats.push({
                 name: "put",
@@ -192,7 +196,7 @@ class Nuage extends Thing {
 
         this.isFree = true;
         this.timeY = 40;
-        this.vx = 1.5;
+        this.vx = 2.5;
         this.vy = 1;
         this.active = true;
     }
@@ -267,15 +271,7 @@ class Nuage extends Thing {
                 name: "climb",
             })
         }
-        if(charAttitude.etatParam.onCloud && charAttitude.x > this.pos.x+this.sprite.width){
-            charAttitude.etats.push({
-                name: "mountClimb",
-                param: {
-                    x: this.pos.x + this.sprite.width / 2,
-                    y: this.pos.y
-                }
-            })
-        }
+        
         
         if(!this.active && charAttitude.etat == "walkRight" && charAttitude.x >= this.pos.x && !charAttitude.etatParam.onCloud){
             charAttitude.etats.push({
@@ -342,7 +338,16 @@ class Colline extends Thing {
             console.log("j'approche")
             charAttitude.speedY = -(charAttitude.speedX)
         }
-        if (charAttitude.etat == "outCloud" && (charAttitude.x > this.pos.x - 100 && charAttitude.x < this.pos.x - 50)) {
+        if(charAttitude.etatParam.onCloud && charAttitude.x > this.pos.x+20){
+            charAttitude.etats.push({
+                name: "mountClimb",
+                param: {
+                    x: this.pos.x + this.sprite.width / 2,
+                    y: this.pos.y
+                }
+            })
+        }
+        if (charAttitude.etat == "outCloud" && (charAttitude.x > this.pos.x - 150 && charAttitude.x < this.pos.x - 75)) {
             //console.log("charattitude and mountattitude", charAttitude, this.pos)
             charAttitude.etatParam.mount = true;
         }

@@ -53,7 +53,15 @@ class World {
             deltaY: 0,
             zoom: 1,
             deltaZoom: 0,
-            vitesseMax: 3
+            vitesseMax: 3,
+            vitesse: 2,
+            scale: 1,
+            up: keyboard(90),
+            down: keyboard(83),
+            left: keyboard(81),
+            right: keyboard(68),
+            zoom: keyboard(65),
+            dezoom: keyboard(69)
         }
 
     }
@@ -96,7 +104,7 @@ class World {
         for (var layer of this.layers) {
             layer.play(this.camPos);
         }
-        
+
         if (this.locked) {
 
             this.camPos.deltaX = 0
@@ -104,28 +112,45 @@ class World {
 
             if (this.camPos.x < charAttitude.x) {
                 var deplacement = Math.abs(this.camPos.x - charAttitude.x) < this.camPos.vitesseMax ? charAttitude.x : this.camPos.x + this.camPos.vitesseMax;
-                this.camPos.deltaX =  deplacement - this.camPos.x;
+                this.camPos.deltaX = deplacement - this.camPos.x;
                 this.camPos.x = deplacement;
             }
             if (this.camPos.x > charAttitude.x) {
                 var deplacement = Math.abs(this.camPos.x - charAttitude.x) < this.camPos.vitesseMax ? charAttitude.x : this.camPos.x - this.camPos.vitesseMax;
-                this.camPos.deltaX = deplacement- this.camPos.x;
+                this.camPos.deltaX = deplacement - this.camPos.x;
                 this.camPos.x = deplacement;
             }
             if (this.camPos.y < charAttitude.y) {
                 var deplacement = Math.abs(this.camPos.y - charAttitude.y) < this.camPos.vitesseMax ? charAttitude.y : this.camPos.y + this.camPos.vitesseMax;
-                this.camPos.deltaY = deplacement-this.camPos.y;
+                this.camPos.deltaY = deplacement - this.camPos.y;
                 this.camPos.y = deplacement;
             }
             if (this.camPos.y > charAttitude.y) {
                 var deplacement = Math.abs(this.camPos.y - charAttitude.y) < this.camPos.vitesseMax ? charAttitude.y : this.camPos.y - this.camPos.vitesseMax;
-                this.camPos.deltaY = deplacement-this.camPos.y;
+                this.camPos.deltaY = deplacement - this.camPos.y;
                 this.camPos.y = deplacement;
             }
-           
+
         } else {
             this.camPos.deltaX = 0
             this.camPos.deltaY = 0
+
+            if (this.camPos.up.isDown) {
+                this.camPos.y += -this.camPos.vitesse;
+                this.camPos.deltaY = -this.camPos.vitesse;
+            }
+            if (this.camPos.down.isDown) {
+                this.camPos.y += this.camPos.vitesse;
+                this.camPos.deltaY = this.camPos.vitesse;
+            }
+            if (this.camPos.left.isDown) {
+                this.camPos.x += -this.camPos.vitesse;
+                this.camPos.deltaX = -this.camPos.vitesse;
+            }
+            if (this.camPos.right.isDown) {
+                this.camPos.x += this.camPos.vitesse;
+                this.camPos.deltaX = this.camPos.vitesse;
+            }
         }
         for (var thing of this.things) {
             thing.play(this.camPos, charAttitude);
