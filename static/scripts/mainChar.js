@@ -57,15 +57,15 @@ class Entity {
         //var futurEtat = "";
 
         charPos.etats.sort(() => (a, b) => {
-            return this.etats[b].priority - this.etats[a].priority
+            return this.etats[b.name].priority - this.etats[a.name].priority
         })
         
         if(charPos.etats[0]){
             console.log("choix etat a proposer : ", charPos.etats[0], charPos.etats)
-            this.switchEtat(charPos.etats[0]);
+            this.switchEtat(charPos.etats[0].name, charPos.etats[0].param);
         }
-        
-        this.etat.runFunc(this, charPos.effets)
+        console.log("pouet pouet frame state : ", this.animation._currentTime, this.animation.currentFrame, this.animation.totalFrames)
+        this.etat.runFunc(this, charPos.effets, this.etatParam)
         this.setScreenX(charPos.x - (camPos.x - camPos.boundaryX));
         this.x = charPos.x;
         this.setScreenY(charPos.y - (camPos.y - camPos.boundaryY));
@@ -90,6 +90,7 @@ class Entity {
             return;
         }
         this.etatName = etat;
+        this.etatParam = param;
         this.etat = this.etats[etat];
         this.switchAnim(this.etat.animation)
         this.etat.startFunc(this, param);
@@ -101,11 +102,12 @@ class Entity {
             this.animation.height = this.etat.animParam.height
         }
         this.animation.zIndex = this.etat.animParam && this.etat.animParam.zIndex ? this.etat.animParam.zIndex : 1;
+
         if (this.etat.loop === false) {
             this.animation.loop = false;
             if (this.etat.removeOnFinish) {
                 this.animation.onComplete = () => {
-                    this.switchEtat("none", param)
+                    this.switchEtat("none")
                 }
             } else {
                 this.animation.onComplete = () => {
@@ -157,7 +159,12 @@ class Entity {
             y: this.getY(),
             speedX: this.getspeedX(),
             speedY: this.getspeedY(),
-            etat: this.etatName
+            etat: this.etatName,
+            etatParam: this.etatParam,
+            frameState: {
+                current: this.animation.currentFrame,
+                total: this.animation.totalFrames
+            }
         }
     }
 }
@@ -355,7 +362,7 @@ function initMainChar() {
         animParam: {
             speed: 0.1
         },
-        priority: 1,
+        priority: 0,
         startFunc: function (player, effets) {
             player.setspeedX(0)
         },
@@ -515,18 +522,22 @@ function initMainChar() {
 
     etats.put = {
         animation: 'put',
+        loop: false,
         animParam: {
             width: 135,
             height: 260,
             speed: 0.05,
             loop: false
         },
-        priority: 1,
+        priority: 5,
         startFunc: function () {
 
         },
-        runFunc: function () {
-
+        runFunc: function (player) {
+            if(player.animFinished){
+                player.switchEtat("none")
+                player.switchEtat("standLeft")
+            }
         },
         endFunc: function () {
 

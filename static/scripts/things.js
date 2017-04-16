@@ -110,8 +110,20 @@ class Coffre extends Thing {
         deplacement.y = 0;
 
         this.offTurn(camPos, charAttitude)
-        
-        
+
+        if(charAttitude.effets.includes("near_coffer") && charAttitude.etat == "catch"){
+            this.switchState();
+            charAttitude.etats.push({
+                name: "put",
+                param: {
+                    x: this.pos.x + this.sprite.width/2,
+                    y: this.pos.y
+                }
+            })
+        }
+        if(charAttitude.etat == "put" && charAttitude.frameState.current == 3 && this.opened){
+                this.switchState();
+            }
         this.pos.x += deplacement.x;
         this.pos.y += deplacement.y;
     }
@@ -135,7 +147,7 @@ class Coffre extends Thing {
         hit = false;
 
         if (
-            (r1.x > r2.x-5 && r1.x < r2.x +5 && direction < 0) || (r1.x > r2.x + r2.width-5&&r1.x < r2.x + r2.width +5 && direction > 0)
+            (r1.x > r2.x-5 && r1.x < r2.x +5 && direction <= 0) || (r1.x > r2.x + r2.width-5&&r1.x < r2.x + r2.width +5 && direction >= 0)
         ) {
             hit = true;
         }
@@ -209,6 +221,18 @@ class Nuage extends Thing {
             if(this.pos.y > charAttitude.y-200){
                 this.pos.y += -1;
             }
+        }else if(charAttitude.etat == "put" && !this.isFree){
+            if(charAttitude.frameState.current == 1){
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width/2,
+                this.pos.y = charAttitude.etatParam.y - 50
+            }else if(charAttitude.frameState.current == 2){
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width/2,
+                this.pos.y = charAttitude.etatParam.y
+            }else if(charAttitude.frameState.current == 3){
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width/2,
+                this.pos.y = -500
+            }
+
         }else{
             this.isFree = true;
         }
