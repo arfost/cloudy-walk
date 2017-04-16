@@ -58,7 +58,7 @@ class Entity {
         //console.log("pouet pouet frame state : ", this.animation._currentTime, this.animation.currentFrame, this.animation.totalFrames)
         this.x = charPos.x;
         this.y = charPos.y;
-        this.etat.runFunc(this, charPos.effets, this.etatParam)
+        this.etat.runFunc(this, charPos.effets, this.etat.param)
         this.setScreenX(charPos.x - (camPos.x - camPos.boundaryX));
 
         this.setScreenY(charPos.y - (camPos.y - camPos.boundaryY));
@@ -76,7 +76,7 @@ class Entity {
     }
     applyEtat(etat, param) {
         if (this.etat) {
-            this.etat.endFunc(this, param)
+            this.etat.endFunc(this, this.etat.param)
         }
         if (!this.etats[etat]) {
             console.error("etat non defini : ", etat, this.etats, this.etats[etat])
@@ -248,9 +248,15 @@ function initMainChar() {
     }
 
     var cloudClimb = [];
-    for (var i = 1; i <= 6; i++) {
+    for (var i = 1; i <= 2; i++) {
         // magically works since the spritesheet was loaded with the pixi loader
         cloudClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
+    }
+    cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
+    var mountClimb = [];
+    for (var i = 1; i <= 6; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        mountClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
     }
 
     var outCloud = [];
@@ -280,6 +286,7 @@ function initMainChar() {
     anims['sit'] = sit;
     anims['climb'] = climb;
     anims['cloudClimb'] = cloudClimb;
+    anims['mountClimb'] = mountClimb;
     anims['outCloud'] = outCloud;
     anims['tobogan'] = tobogan;
 
@@ -372,10 +379,10 @@ function initMainChar() {
             speed: 0.1
         },
         priority: 0,
-        startFunc: function (player, effets) {
+        startFunc: function (player, param) {
             player.setspeedX(0)
         },
-        runFunc: function (player, effets) {
+        runFunc: function (player, effets, param) {
             if (right.isDown) {
                 player.switchEtat("walkRight")
                 return;
@@ -578,10 +585,10 @@ function initMainChar() {
             player.setspeedX(0)
         },
         runFunc: function (player) {
-            console.log("getUp up", player.y, player.speedY)
+            //console.log("getUp up", player.y, player.speedY)
             if (player.y <= 250 && player.speedY != 0) {
                 player.setspeedY(0);
-                console.log("getUp stop up")
+                //console.log("getUp stop up")
                 player.y = 250;
             }
             if (player.animFinished) {
@@ -593,7 +600,7 @@ function initMainChar() {
             }
         },
         endFunc: function (player) {
-            console.log("getUp fin : ", player.y)
+            //console.log("getUp fin : ", player.y)
         }
     }
 
@@ -604,7 +611,7 @@ function initMainChar() {
         },
         priority: 5,
         startFunc: function (player, param) {
-            this.cptFall = param ? param : 0;
+            this.cptFall = param.cpt ? param.cpt : 0;
             //console.log("sit cptFall", this.cptFall)
         },
         runFunc: function (player) {
@@ -613,7 +620,7 @@ function initMainChar() {
             if (player.y >= 330 && (player.speedY != 0 || player.speedX != 0)) {
                 player.setspeedY(0)
                 player.setspeedX(0)
-                console.log("y on stop climb : ", player.y)
+                //console.log("y on stop climb : ", player.y)
             }
             if (right.isDown && !(player.speedY != 0 || player.speedX != 0)) {
                 player.switchEtat("getUp")
@@ -639,7 +646,7 @@ function initMainChar() {
             this.cptFall = 0
             //console.log("y on start climb : ", player.y)
         },
-        runFunc: function (player) {
+        runFunc: function (player, effets, param) {
             if (player.animation.currentFrame == 1) {
                 player.setspeedX(-2)
             }
@@ -652,7 +659,7 @@ function initMainChar() {
                 //console.log("y on stop climb : ", player.y)
             }
             if (player.animFinished) {
-                player.switchEtat("sit", 80 - this.cptFall)
+                player.switchEtat("sit", {cpt: 80 - this.cptFall})
                 return;
             }
         },
@@ -671,7 +678,7 @@ function initMainChar() {
             speed: 0.03,
             loop: false
         },
-        priority: 1,
+        priority: 4,
         startFunc: function () {
 
         },
@@ -680,6 +687,43 @@ function initMainChar() {
         },
         endFunc: function () {
 
+        }
+    }
+
+    etats.cloudClimb = {
+        animation: 'cloudClimb',
+        loop: false,
+        removeOnFinish: true,
+        animParam: {
+            width: 105,
+            height: 235,
+            speed: 0.03,
+            loop: false
+        },
+        priority: 4,
+        startFunc: function (player) {
+            player.setspeedY(-1.5)
+            player.setspeedX(1)
+        },
+        runFunc: function (player, effets, param) {
+            console.log("position relative : ", player.getBound(), param)
+            if(player.x >= param.x){
+                player.setspeedX(0);
+            }
+            if(player.y>= param.y + player.getBound().height/2 -12){
+                player.setspeedY(0);
+            }
+            if (player.animation.currentFrame == 2) {
+                player.x = param.x
+                player.y = param.y - player.getBound().height/2 +52
+                player.setspeedX(0);
+                player.setspeedY(0);
+            }
+        },
+        endFunc: function (player, param) {
+            console.log("position relative finale: ", player.getBound(), param)
+            player.x = param.x
+            player.y = param.y - player.getBound().height/2 +12
         }
     }
 
@@ -693,15 +737,9 @@ function initMainChar() {
             speed: 0.05
         },
         priority: 5,
-        startFunc: function () {
-
-        },
-        runFunc: function () {
-
-        },
-        endFunc: function () {
-
-        }
+        startFunc: function () {},
+        runFunc: function () {},
+        endFunc: function () {}
     }
 
     etats.tobogan = {

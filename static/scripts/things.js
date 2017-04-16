@@ -114,7 +114,7 @@ class Coffre extends Thing {
 
         this.offTurn(camPos, charAttitude)
 
-        if (charAttitude.effets.includes("near_coffer_put") && charAttitude.etat == "catch") {
+        if (charAttitude.effets.includes("near_coffer_put") && charAttitude.etat == "catch" && charAttitude.frameState.current == charAttitude.frameState.total -1) {
             this.switchState();
             charAttitude.etats.push({
                 name: "put",
@@ -254,9 +254,27 @@ class Nuage extends Thing {
     turn(camPos, charAttitude) {
         this.offTurn(camPos, charAttitude);
         //console.log("test : ", this.pos.x + (this.sprite.width / 2) +50 >charAttitude.x , this.pos.x + (this.sprite.width /2) -50 < charAttitude.x)
-        if (this.pos.x + (this.sprite.width / 2) + 50 > charAttitude.x && this.pos.x + (this.sprite.width / 2) - 50 < charAttitude.x) {
+        if (this.pos.x + (this.sprite.width / 2) + 50 > charAttitude.x && this.pos.x + (this.sprite.width / 2) - 50 < charAttitude.x && this.active) {
             this.close = true;
             charAttitude.effets.push("slow")
+        }
+        if(charAttitude.y<125){
+            charAttitude.etatParam.onCloud = true
+        }
+        if(charAttitude.etatParam.onCloud && charAttitude.x < this.pos.x){
+            charAttitude.etats.push({
+                name: "climb",
+            })
+        }
+        
+        if(!this.active && charAttitude.etat == "walkRight" && charAttitude.x >= this.pos.x && !charAttitude.etatParam.onCloud){
+            charAttitude.etats.push({
+                name: "cloudClimb",
+                param: {
+                    x: this.pos.x + this.sprite.width / 2,
+                    y: this.pos.y
+                }
+            })
         }
         if (charAttitude.etat == "catch" && this.close) {
             this.isFree = false;
@@ -305,17 +323,17 @@ class Nuage extends Thing {
 class Colline extends Thing {
     turn(camPos, charAttitude) {
         //console.log(this.pos.x, charAttitude.x, this.pos.x < charAttitude.x, this.pos.x -5 + this.sprite.width/2 > charAttitude.x)
-        if (this.pos.x + 20 < charAttitude.x && this.pos.x - 5 + this.sprite.width / 2 > charAttitude.x && (charAttitude.etat.includes("walk") || charAttitude.etat.includes("push"))) {
+        if (this.pos.x + 20 < charAttitude.x && this.pos.x - 5 + this.sprite.width / 2 > charAttitude.x && (charAttitude.etat.includes("walk") || charAttitude.etat.includes("push")) && !charAttitude.etatParam.onCloud) {
             console.log("et je tombe")
             charAttitude.etats.push({
                 name: "climb",
             })
-        } else if (this.pos.x < charAttitude.x && this.pos.x - 5 + this.sprite.width / 2 > charAttitude.x && (charAttitude.etat.includes("walk") || charAttitude.etat.includes("push"))) {
+        } else if (this.pos.x < charAttitude.x && this.pos.x - 5 + this.sprite.width / 2 > charAttitude.x && (charAttitude.etat.includes("walk") || charAttitude.etat.includes("push")) && !charAttitude.etatParam.onCloud) {
             console.log("j'approche")
             charAttitude.speedY = -(charAttitude.speedX)
         }
         if (charAttitude.etat == "outCloud" && (charAttitude.x > this.pos.x - 100 && charAttitude.x < this.pos.x - 50)) {
-            console.log("charattitude and mountattitude", charAttitude, this.pos)
+            //console.log("charattitude and mountattitude", charAttitude, this.pos)
             charAttitude.etatParam.mount = true;
         }
     }
