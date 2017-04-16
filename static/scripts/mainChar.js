@@ -252,6 +252,9 @@ function initMainChar() {
         // magically works since the spritesheet was loaded with the pixi loader
         cloudClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
     }
+    cloudClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + 2 + '.png'));
+    cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
+    cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
     cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
     var mountClimb = [];
     for (var i = 1; i <= 6; i++) {
@@ -697,23 +700,23 @@ function initMainChar() {
         animParam: {
             width: 105,
             height: 235,
-            speed: 0.05,
+            speed: 0.1,
             loop: false
         },
         priority: 4,
         startFunc: function (player) {
-            player.setspeedY(-2.5)
+            player.setspeedY(-3)
             player.setspeedX(1)
         },
         runFunc: function (player, effets, param) {
             console.log("position relative : ", player.getBound(), param)
-            if(player.x >= param.x){
+            if(player.x >= param.x-10){
                 player.setspeedX(0);
             }
-            if(player.y>= param.y + player.getBound().height/2 -12){
+            if(player.y>= param.y + player.getBound().height/2 -22){
                 player.setspeedY(0);
             }
-            if (player.animation.currentFrame == 2) {
+            if (player.animation.currentFrame == 3) {
                 player.x = param.x
                 player.y = param.y - player.getBound().height/2 +52
                 player.setspeedX(0);

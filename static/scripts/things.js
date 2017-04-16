@@ -261,9 +261,19 @@ class Nuage extends Thing {
         if(charAttitude.y<125){
             charAttitude.etatParam.onCloud = true
         }
-        if(charAttitude.etatParam.onCloud && charAttitude.x < this.pos.x){
+        if(charAttitude.etatParam.onCloud && charAttitude.x < this.pos.x && charAttitude.etat.includes("walk")){
+            console.log("fall cloud", charAttitude.etatParam.onCloud, charAttitude.x)
             charAttitude.etats.push({
                 name: "climb",
+            })
+        }
+        if(charAttitude.etatParam.onCloud && charAttitude.x > this.pos.x+this.sprite.width){
+            charAttitude.etats.push({
+                name: "mountClimb",
+                param: {
+                    x: this.pos.x + this.sprite.width / 2,
+                    y: this.pos.y
+                }
             })
         }
         
