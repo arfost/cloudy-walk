@@ -89,21 +89,21 @@ class Coffre extends Thing {
 
     offTurn(camPos, charAttitude) {
         if (charAttitude.etat.includes("push")) {
-            console.log("i see him push : ",charAttitude.speedX, charAttitude.bound, this.getBound(), this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX))
-            
             this.pos.x += charAttitude.speedX;
         }
-        //console.log("test test : ", this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX))
-        if (this.hitTestRectangle(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
-                console.log("and i feel it")
-                charAttitude.effets.push('near_coffer')
-            }
-
-        if(this.boost){
-            this.pos.x = this.pos.x +2.5
+        if (this.hitTestPush(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
+            //console.log("and i feel it")
+            charAttitude.effets.push('near_coffer')
         }
-        if(this.antiBoost){
-            this.pos.x = this.pos.x -2.5
+        if (this.hitTestPut(charAttitude.bound, this.getBound(), charAttitude.speedX)) {
+            console.log("and i feel it")
+            charAttitude.effets.push('near_coffer_put')
+        }
+        if (this.boost) {
+            this.pos.x = this.pos.x + 2.5
+        }
+        if (this.antiBoost) {
+            this.pos.x = this.pos.x - 2.5
         }
     }
 
@@ -114,19 +114,29 @@ class Coffre extends Thing {
 
         this.offTurn(camPos, charAttitude)
 
-        if(charAttitude.effets.includes("near_coffer") && charAttitude.etat == "catch"){
+        if (charAttitude.effets.includes("near_coffer_put") && charAttitude.etat == "catch") {
             this.switchState();
             charAttitude.etats.push({
                 name: "put",
                 param: {
-                    x: this.pos.x + this.sprite.width/2,
+                    x: this.pos.x + this.sprite.width / 2,
                     y: this.pos.y
                 }
             })
         }
-        if(charAttitude.etat == "put" && charAttitude.frameState.current == 3 && this.opened){
-                this.switchState();
-            }
+        if (((charAttitude.etat == "put" && charAttitude.frameState.current == 3) || (charAttitude.etat == "outCloud" && charAttitude.frameState.current == 5)) && this.opened) {
+            this.switchState();
+        }
+        if(charAttitude.etat.includes("stand") && charAttitude.etatParam.up && charAttitude.effets.includes("near_coffer_put")){
+            this.switchState();
+            charAttitude.etats.push({
+                name: "outCloud",
+                param: {
+                    x: this.pos.x + this.sprite.width / 2,
+                    y: this.pos.y
+                }
+            })
+        }
         this.pos.x += deplacement.x;
         this.pos.y += deplacement.y;
     }
@@ -141,7 +151,7 @@ class Coffre extends Thing {
         return bound;
     }
 
-    hitTestRectangle(r1, r2, direction) {
+    hitTestPut(r1, r2, direction) {
 
         //Define the variables we'll need to calculate
         var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
@@ -150,7 +160,23 @@ class Coffre extends Thing {
         hit = false;
 
         if (
-            (r1.x > r2.x-5 && r1.x < r2.x +5 && direction <= 0) || (r1.x > r2.x + r2.width-5&&r1.x < r2.x + r2.width +5 && direction >= 0)
+            (r1.x > r2.x + r2.width - 10 && r1.x < r2.x + r2.width + 10 && direction == 0)
+        ) {
+            hit = true;
+        }
+
+        return hit;
+    };
+    hitTestPush(r1, r2, direction) {
+
+        //Define the variables we'll need to calculate
+        var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+        //hit will determine whether there's a collision
+        hit = false;
+
+        if (
+            (r1.x > r2.x - 5 && r1.x < r2.x + 5 && direction <= 0) || (r1.x > r2.x + r2.width - 5 && r1.x < r2.x + r2.width + 5 && direction >= 0)
         ) {
             hit = true;
         }
@@ -186,10 +212,10 @@ class Nuage extends Thing {
                 this.timeY--;
             }
 
-            if (this.pos.x + (this.sprite.width / 2)-40 > charAttitude.x && this.close) {
+            if (this.pos.x + (this.sprite.width / 2) - 40 > charAttitude.x && this.close) {
                 this.vx = -1.5
             }
-            if (this.pos.x + (this.sprite.width / 2)+40 < charAttitude.x && this.close) {
+            if (this.pos.x + (this.sprite.width / 2) + 40 < charAttitude.x && this.close) {
                 this.vx = 1.5
             }
             deplacement.x += this.vx;
@@ -198,48 +224,71 @@ class Nuage extends Thing {
             this.pos.x += deplacement.x;
             this.pos.y += deplacement.y;
         }
+        if (charAttitude.etat == "outCloud" && this.isHidden) {
+            console.log("nuage out cloud", charAttitude.etatParam)
+            if(this.ancientCharFrame === undefined){
+                this.ancientCharFrame = 0
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width / 2
+                this.pos.y = charAttitude.etatParam.y
+                this.active = false;
+            }
+            if (charAttitude.frameState.current != this.ancientCharFrame) {
+                this.pos.x = this.pos.x + 35;
+                this.ancientCharFrame = charAttitude.frameState.current;
+            } 
+            if (charAttitude.frameState.current == charAttitude.frameState.total-1) {
+                this.isHidden = false;
+                this.ancientCharFrame = undefined
+                if(!charAttitude.etatParam.mount){
+                    this.active = true;
+                    this.timeY = 180
+                    this.vy = -1
+                }
+            } 
+        }
         //console.log("nuage doit reapparaitre", charAttitude.etat == "pop" , this.pos.y == 5000)
-        
+
 
     }
 
     turn(camPos, charAttitude) {
         this.offTurn(camPos, charAttitude);
         //console.log("test : ", this.pos.x + (this.sprite.width / 2) +50 >charAttitude.x , this.pos.x + (this.sprite.width /2) -50 < charAttitude.x)
-        if(this.pos.x + (this.sprite.width / 2) +50 >charAttitude.x && this.pos.x + (this.sprite.width /2) -50 < charAttitude.x){
+        if (this.pos.x + (this.sprite.width / 2) + 50 > charAttitude.x && this.pos.x + (this.sprite.width / 2) - 50 < charAttitude.x) {
             this.close = true;
             charAttitude.effets.push("slow")
         }
-        if(charAttitude.etat == "catch" && this.close){
+        if (charAttitude.etat == "catch" && this.close) {
             this.isFree = false;
-            if(this.pos.x + (this.sprite.width / 2)< charAttitude.x){
+            if (this.pos.x + (this.sprite.width / 2) < charAttitude.x) {
                 this.pos.x += 1;
             }
-            if(this.pos.x + (this.sprite.width / 2)> charAttitude.x){
+            if (this.pos.x + (this.sprite.width / 2) > charAttitude.x) {
                 this.pos.x += -1;
             }
-            if(this.pos.y < charAttitude.y-200){
+            if (this.pos.y < charAttitude.y - 200) {
                 this.pos.y += 1;
             }
-            if(this.pos.y > charAttitude.y-200){
+            if (this.pos.y > charAttitude.y - 200) {
                 this.pos.y += -1;
             }
-        }else if(charAttitude.etat == "put" && !this.isFree){
-            if(charAttitude.frameState.current == 1){
-                this.pos.x = charAttitude.etatParam.x - this.sprite.width/2,
-                this.pos.y = charAttitude.etatParam.y - 50
-            }else if(charAttitude.frameState.current == 2){
-                this.pos.x = charAttitude.etatParam.x - this.sprite.width/2,
-                this.pos.y = charAttitude.etatParam.y
-            }else if(charAttitude.frameState.current == 3){
-                this.pos.x = charAttitude.etatParam.x - this.sprite.width/2,
-                this.pos.y = -500
+        } else if (charAttitude.etat == "put" && !this.isFree) {
+            if (charAttitude.frameState.current == 1) {
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width / 2,
+                    this.pos.y = charAttitude.etatParam.y - 50
+            } else if (charAttitude.frameState.current == 2) {
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width / 2,
+                    this.pos.y = charAttitude.etatParam.y
+            } else if (charAttitude.frameState.current == 3) {
+                this.pos.x = charAttitude.etatParam.x - this.sprite.width / 2,
+                    this.pos.y = -500
+                    this.isHidden = true;
             }
 
-        }else{
+        } else {
             this.isFree = true;
         }
-        
+
     }
 
     getBound() {
@@ -256,14 +305,18 @@ class Nuage extends Thing {
 class Colline extends Thing {
     turn(camPos, charAttitude) {
         //console.log(this.pos.x, charAttitude.x, this.pos.x < charAttitude.x, this.pos.x -5 + this.sprite.width/2 > charAttitude.x)
-        if (this.pos.x + 20 < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && (charAttitude.etat == "walkRight" || charAttitude.etat == "pushRight")) {
+        if (this.pos.x + 20 < charAttitude.x && this.pos.x - 5 + this.sprite.width / 2 > charAttitude.x && (charAttitude.etat.includes("walk") || charAttitude.etat.includes("push"))) {
             console.log("et je tombe")
             charAttitude.etats.push({
-                name:"climb",
+                name: "climb",
             })
-        } else if (this.pos.x < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && (charAttitude.etat == "walkRight"|| charAttitude.etat == "pushRight")) {
+        } else if (this.pos.x < charAttitude.x && this.pos.x - 5 + this.sprite.width / 2 > charAttitude.x && (charAttitude.etat.includes("walk") || charAttitude.etat.includes("push"))) {
             console.log("j'approche")
             charAttitude.speedY = -(charAttitude.speedX)
+        }
+        if (charAttitude.etat == "outCloud" && (charAttitude.x > this.pos.x - 100 && charAttitude.x < this.pos.x - 50)) {
+            console.log("charattitude and mountattitude", charAttitude, this.pos)
+            charAttitude.etatParam.mount = true;
         }
     }
 }
