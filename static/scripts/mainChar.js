@@ -65,11 +65,13 @@ class Entity {
             this.switchEtat(charPos.etats[0].name, charPos.etats[0].param);
         }
         //console.log("pouet pouet frame state : ", this.animation._currentTime, this.animation.currentFrame, this.animation.totalFrames)
+        this.x = charPos.x;
+        this.y = charPos.y;
         this.etat.runFunc(this, charPos.effets, this.etatParam)
         this.setScreenX(charPos.x - (camPos.x - camPos.boundaryX));
-        this.x = charPos.x;
+        
         this.setScreenY(charPos.y - (camPos.y - camPos.boundaryY));
-        this.y = charPos.y;
+        
     }
     switchEtat(etat, param) {
         console.log("nouvel etat : ", etat, this.etat, this.etats[etat])
@@ -95,10 +97,10 @@ class Entity {
         this.switchAnim(this.etat.animation)
         this.etat.startFunc(this, param);
         this.animation.animationSpeed = this.etat.animParam && this.etat.animParam.speed ? this.etat.animParam.speed : 0.2;
-        if (this.etat.animParams && this.etat.animParam.width !== undefined) {
+        if (this.etat.animParam && this.etat.animParam.width !== undefined) {
             this.animation.width = this.etat.animParam.width
         }
-        if (this.etat.animParams && this.etat.animParam.height !== undefined) {
+        if (this.etat.animParam && this.etat.animParam.height !== undefined) {
             this.animation.height = this.etat.animParam.height
         }
         this.animation.zIndex = this.etat.animParam && this.etat.animParam.zIndex ? this.etat.animParam.zIndex : 1;
@@ -535,8 +537,6 @@ function initMainChar() {
         animation: 'put',
         loop: false,
         animParam: {
-            width: 135,
-            height: 260,
             speed: 0.05
         },
         priority: 5,
@@ -558,13 +558,12 @@ function initMainChar() {
         animation: 'getup',
         loop: false,
         animParam: {
-            width: 95,
-            height: 210,
             speed: 0.1
         },
         priority: 6,
         startFunc: function (player) {
-            player.setspeedY(-1)
+            player.setspeedY(0)
+            player.setspeedX(0)
         },
         runFunc: function (player) {
             console.log("getUp up", player.y , player.speedY )
@@ -574,20 +573,20 @@ function initMainChar() {
                 player.y = 250;
             }
             if(player.animFinished){
+                //player.setspeedY(0);
+                player.y = 250;
                 player.switchEtat("none");
                 player.switchEtat("standRight")
             }
         },
-        endFunc: function () {
-
+        endFunc: function (player) {
+            console.log("getUp fin : ", player.y)
         }
     }
 
     etats.sit = {
         animation: 'sit',
         animParam: {
-            width: 155,
-            height: 290,
             speed: 0.1
         },
         priority: 5,
@@ -616,8 +615,8 @@ function initMainChar() {
         animation: 'climb',
         loop: false,
         animParam: {
-            width: 155,
-            height: 290,
+            width: 135,
+            height: 250,
             speed: 0.05
         },
         priority: 4,
