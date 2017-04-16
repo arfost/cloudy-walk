@@ -64,7 +64,7 @@ class Entity {
             console.log("choix etat a proposer : ", charPos.etats[0], charPos.etats)
             this.switchEtat(charPos.etats[0].name, charPos.etats[0].param);
         }
-        console.log("pouet pouet frame state : ", this.animation._currentTime, this.animation.currentFrame, this.animation.totalFrames)
+        //console.log("pouet pouet frame state : ", this.animation._currentTime, this.animation.currentFrame, this.animation.totalFrames)
         this.etat.runFunc(this, charPos.effets, this.etatParam)
         this.setScreenX(charPos.x - (camPos.x - camPos.boundaryX));
         this.x = charPos.x;
@@ -238,9 +238,15 @@ function initMainChar() {
     }
 
     var climb = [];
-    for (var i = 1; i <= 4; i++) {
+    for (var i = 1; i <= 3; i++) {
         // magically works since the spritesheet was loaded with the pixi loader
         climb.push(PIXI.Texture.fromFrame('climb0' + i + '.png'));
+    }
+
+    var sit = [];
+    for (var i = 4; i <= 4; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        sit.push(PIXI.Texture.fromFrame('climb0' + i + '.png'));
     }
 
     var cloudClimb = [];
@@ -269,6 +275,7 @@ function initMainChar() {
     anims['pushLeft'] = pushLeftAnim;
     anims['put'] = put;
     anims['getup'] = getup;
+    anims['sit'] = sit;
     anims['climb'] = climb;
     anims['cloudClimb'] = cloudClimb;
     anims['outCloud'] = outCloud;
@@ -312,7 +319,7 @@ function initMainChar() {
                 player.switchEtat("lookUp")
                 return;
             }
-            player.animation.speed = animSpeed;
+            player.animation.animationSpeed = animSpeed;
             player.setspeedX(speedX)
         },
         endFunc: function (player, effets) {
@@ -349,7 +356,7 @@ function initMainChar() {
                 player.switchEtat("lookUp")
                 return;
             }
-            player.animation.speed = animSpeed;
+            player.animation.animationSpeed = animSpeed;
             player.setspeedX(speedX)
         },
         endFunc: function (player, effets) {
@@ -458,7 +465,9 @@ function initMainChar() {
 
     etats["pushRight"] = {
         animation: 'push',
-        animParam: {},
+        animParam: {
+            speed: 0.2
+        },
         priority: 3,
         startFunc: function () {
 
@@ -480,7 +489,7 @@ function initMainChar() {
                 player.switchEtat("walkRight")
                 return;
             }
-            player.animation.speed = animSpeed;
+            player.animation.animationSpeed = animSpeed;
             player.setspeedX(speedX)
         },
         endFunc: function () {
@@ -490,7 +499,9 @@ function initMainChar() {
 
     etats["pushLeft"] = {
         animation: 'pushLeft',
-        animParam: {},
+        animParam: {
+            speed: 0.2
+        },
         priority: 3,
         startFunc: function () {
 
@@ -512,7 +523,7 @@ function initMainChar() {
                 player.switchEtat("walkLeft")
                 return;
             }
-            player.animation.speed = animSpeed;
+            player.animation.animationSpeed = animSpeed;
             player.setspeedX(speedX)
         },
         endFunc: function () {
@@ -526,8 +537,7 @@ function initMainChar() {
         animParam: {
             width: 135,
             height: 260,
-            speed: 0.05,
-            loop: false
+            speed: 0.05
         },
         priority: 5,
         startFunc: function () {
@@ -546,18 +556,56 @@ function initMainChar() {
 
     etats.getUp = {
         animation: 'getup',
+        loop: false,
         animParam: {
             width: 95,
             height: 210,
-            speed: 0.1,
-            loop: false
+            speed: 0.1
         },
-        priority: 1,
-        startFunc: function () {
-
+        priority: 6,
+        startFunc: function (player) {
+            player.setspeedY(-1)
         },
-        runFunc: function () {
+        runFunc: function (player) {
+            console.log("getUp up", player.y , player.speedY )
+            if(player.y <= 250 && player.speedY != 0){
+                player.setspeedY(0);
+                console.log("getUp stop up")
+                player.y = 250;
+            }
+            if(player.animFinished){
+                player.switchEtat("none");
+                player.switchEtat("standRight")
+            }
+        },
+        endFunc: function () {
 
+        }
+    }
+
+    etats.sit = {
+        animation: 'sit',
+        animParam: {
+            width: 155,
+            height: 290,
+            speed: 0.1
+        },
+        priority: 5,
+        startFunc: function (player, param) {
+            this.cptFall = param ? param : 0;
+            //console.log("sit cptFall", this.cptFall)
+        },
+        runFunc: function (player) {
+            this.cptFall += -player.speedY;
+            console.log("sit cptFall run", this.cptFall, player.speedY)
+            if(this.cptFall <= 0 && player.speedY != 0){
+                player.setspeedY(0)
+                player.setspeedX(0)
+                console.log("y on stop climb : ", player.y)
+            }
+            if(right.isDown){
+                player.switchEtat("getUp", 40 - this.cptFall)
+            }
         },
         endFunc: function () {
 
@@ -566,21 +614,38 @@ function initMainChar() {
 
     etats.climb = {
         animation: 'climb',
+        loop: false,
         animParam: {
             width: 155,
             height: 290,
-            speed: 0.2,
-            loop: false
+            speed: 0.05
         },
-        priority: 1,
-        startFunc: function () {
-
+        priority: 4,
+        startFunc: function (player) {
+            player.setspeedX(0)
+            this.cptFall = 0
+            //console.log("y on start climb : ", player.y)
         },
-        runFunc: function () {
-
+        runFunc: function (player) {
+            if(player.animation.currentFrame == 1){
+                player.setspeedX(-1)
+            }
+            if(player.animation.currentFrame == 2){
+                player.setspeedY(1)
+            }
+            this.cptFall += player.speedY;
+            if(this.cptFall > 40 && player.speedY != 0){
+                player.setspeedY(0)
+                //console.log("y on stop climb : ", player.y)
+            }
+            if(player.animFinished){
+                player.switchEtat("sit", 40 - this.cptFall)
+            }
         },
-        endFunc: function () {
-
+        endFunc: function (player) {
+            //player.setspeedY(0)
+            //player.setspeedX(0)
+            //console.log("x,y on stop climb : ", player.x, player.y)
         }
     }
 

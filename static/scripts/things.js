@@ -253,11 +253,13 @@ class Nuage extends Thing {
 class Colline extends Thing {
     turn(camPos, charAttitude) {
         //console.log(this.pos.x, charAttitude.x, this.pos.x < charAttitude.x, this.pos.x -5 + this.sprite.width/2 > charAttitude.x)
-        if (this.pos.x + 20 < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && !charAttitude.effets.includes("cloudClimb") && !charAttitude.effets.includes("top")) {
-            //console.log("et je tombe")
-            charAttitude.effets.push("climb")
-        } else if (this.pos.x < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && !charAttitude.effets.includes("cloudClimb") && !charAttitude.effets.includes("top")) {
-            //console.log("j'approche")
+        if (this.pos.x + 20 < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && charAttitude.etat == "walkRight") {
+            console.log("et je tombe")
+            charAttitude.etats.push({
+                name:"climb",
+            })
+        } else if (this.pos.x < charAttitude.x && this.pos.x -5 + this.sprite.width/2 > charAttitude.x && charAttitude.etat == "walkRight") {
+            console.log("j'approche")
             charAttitude.speedY = -(charAttitude.speedX)
         }
     }
