@@ -617,7 +617,7 @@ function initMainChar() {
         runFunc: function (player) {
             this.cptFall--;
             //console.log("sit cptFall run", this.cptFall, player.speedY)
-            if (player.y >= 330 && (player.speedY != 0 || player.speedX != 0)) {
+            if (player.y >= 300 && (player.speedY != 0 || player.speedX != 0)) {
                 player.setspeedY(0)
                 player.setspeedX(0)
                 //console.log("y on stop climb : ", player.y)
@@ -670,8 +670,8 @@ function initMainChar() {
         }
     }
 
-    etats.cloudClimb = {
-        animation: 'cloudClimb',
+    etats.mountClimb = {
+        animation: 'mountClimb',
         animParam: {
             width: 155,
             height: 305,
@@ -697,12 +697,12 @@ function initMainChar() {
         animParam: {
             width: 105,
             height: 235,
-            speed: 0.03,
+            speed: 0.05,
             loop: false
         },
         priority: 4,
         startFunc: function (player) {
-            player.setspeedY(-1.5)
+            player.setspeedY(-2.5)
             player.setspeedX(1)
         },
         runFunc: function (player, effets, param) {

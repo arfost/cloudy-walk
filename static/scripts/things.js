@@ -100,10 +100,10 @@ class Coffre extends Thing {
             charAttitude.effets.push('near_coffer_put')
         }
         if (this.boost) {
-            this.pos.x = this.pos.x + 2.5
+            this.pos.x = this.pos.x + 2
         }
         if (this.antiBoost) {
-            this.pos.x = this.pos.x - 2.5
+            this.pos.x = this.pos.x - 2
         }
     }
 
