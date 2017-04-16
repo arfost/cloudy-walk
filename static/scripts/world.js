@@ -5,25 +5,27 @@ function initWorld() {
     var shift = keyboard(16);
     shift.press = function () {
         console.log("unlock")
-        world.locked = false;
+        world.locked = !world.locked;
     };
     //Left arrow key `release` method
-    shift.release = function () {
-        console.log("lock")
-        world.locked = true;
-    };
+
 
     var num0 = keyboard(18);
     num0.press = function () {
         world.moveHill()
     };
 
-    var x = keyboard(87);
+    var w = keyboard(87);
+    w.press = function () {
+        world.antiBoostcoffer()
+    };
+
+    var x = keyboard(88);
     x.press = function () {
         world.boostcoffer()
     };
 
-    
+
 }
 
 class World {
@@ -50,27 +52,37 @@ class World {
             deltaX: 0,
             deltaY: 0,
             zoom: 1,
-            deltaZoom: 0
+            deltaZoom: 0,
+            vitesseMax: 3
         }
 
     }
 
-    moveHill(){
-        for(var thing of this.things){
-            if(thing.name == "colline"){
-                if(thing.pos.x == 1900){
+    moveHill() {
+        for (var thing of this.things) {
+            if (thing.name == "colline") {
+                if (thing.pos.x == 1900) {
                     thing.pos.x = 400
-                }else{
+                } else {
                     thing.pos.x = 1900
                 }
             }
         }
     }
 
-    boostcoffer(){
-        for(var thing of this.things){
-            if(thing.name == "coffre"){
-                thing.boost += 50;
+    boostcoffer() {
+        for (var thing of this.things) {
+            if (thing.name == "coffre") {
+                thing.boost = !thing.boost;
+                thing.antiBoost = false;
+            }
+        }
+    }
+    antiBoostcoffer() {
+        for (var thing of this.things) {
+            if (thing.name == "coffre") {
+                thing.antiBoost = !thing.antiBoost;
+                thing.boost = false;
             }
         }
     }
@@ -84,18 +96,39 @@ class World {
         for (var layer of this.layers) {
             layer.play(this.camPos);
         }
-        for (var thing of this.things) {
-            thing.play(this.camPos, charAttitude);
-        }
+        
         if (this.locked) {
-            this.camPos.x += charAttitude.speedX;
-            this.camPos.deltaX = charAttitude.speedX
 
-            this.camPos.y += charAttitude.speedY;
-            this.camPos.deltaY = charAttitude.speedY
+            this.camPos.deltaX = 0
+            this.camPos.deltaY = 0
+
+            if (this.camPos.x < charAttitude.x) {
+                var deplacement = Math.abs(this.camPos.x - charAttitude.x) < this.camPos.vitesseMax ? charAttitude.x : this.camPos.x + this.camPos.vitesseMax;
+                this.camPos.deltaX =  deplacement - this.camPos.x;
+                this.camPos.x = deplacement;
+            }
+            if (this.camPos.x > charAttitude.x) {
+                var deplacement = Math.abs(this.camPos.x - charAttitude.x) < this.camPos.vitesseMax ? charAttitude.x : this.camPos.x - this.camPos.vitesseMax;
+                this.camPos.deltaX = deplacement- this.camPos.x;
+                this.camPos.x = deplacement;
+            }
+            if (this.camPos.y < charAttitude.y) {
+                var deplacement = Math.abs(this.camPos.y - charAttitude.y) < this.camPos.vitesseMax ? charAttitude.y : this.camPos.y + this.camPos.vitesseMax;
+                this.camPos.deltaY = deplacement-this.camPos.y;
+                this.camPos.y = deplacement;
+            }
+            if (this.camPos.y > charAttitude.y) {
+                var deplacement = Math.abs(this.camPos.y - charAttitude.y) < this.camPos.vitesseMax ? charAttitude.y : this.camPos.y - this.camPos.vitesseMax;
+                this.camPos.deltaY = deplacement-this.camPos.y;
+                this.camPos.y = deplacement;
+            }
+           
         } else {
             this.camPos.deltaX = 0
             this.camPos.deltaY = 0
+        }
+        for (var thing of this.things) {
+            thing.play(this.camPos, charAttitude);
         }
         var charPos = {
             x: charAttitude.x + charAttitude.speedX,

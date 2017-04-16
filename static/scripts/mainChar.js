@@ -562,7 +562,7 @@ function initMainChar() {
         },
         priority: 6,
         startFunc: function (player) {
-            player.setspeedY(0)
+            player.setspeedY(-1)
             player.setspeedX(0)
         },
         runFunc: function (player) {
@@ -573,7 +573,7 @@ function initMainChar() {
                 player.y = 250;
             }
             if(player.animFinished){
-                //player.setspeedY(0);
+                player.setspeedY(0);
                 player.y = 250;
                 player.switchEtat("none");
                 player.switchEtat("standRight")
@@ -595,15 +595,15 @@ function initMainChar() {
             //console.log("sit cptFall", this.cptFall)
         },
         runFunc: function (player) {
-            this.cptFall += -player.speedY;
-            console.log("sit cptFall run", this.cptFall, player.speedY)
-            if(this.cptFall <= 0 && player.speedY != 0){
+            this.cptFall --;
+            //console.log("sit cptFall run", this.cptFall, player.speedY)
+            if(player.y >= 330 && (player.speedY != 0 || player.speedX != 0)){
                 player.setspeedY(0)
                 player.setspeedX(0)
                 console.log("y on stop climb : ", player.y)
             }
-            if(right.isDown){
-                player.switchEtat("getUp", 40 - this.cptFall)
+            if(right.isDown && !(player.speedY != 0 || player.speedX != 0)){
+                player.switchEtat("getUp")
             }
         },
         endFunc: function () {
@@ -617,7 +617,7 @@ function initMainChar() {
         animParam: {
             width: 135,
             height: 250,
-            speed: 0.05
+            speed: 0.1
         },
         priority: 4,
         startFunc: function (player) {
@@ -627,18 +627,18 @@ function initMainChar() {
         },
         runFunc: function (player) {
             if(player.animation.currentFrame == 1){
-                player.setspeedX(-1)
+                player.setspeedX(-2)
             }
             if(player.animation.currentFrame == 2){
-                player.setspeedY(1)
+                player.setspeedY(2)
             }
             this.cptFall += player.speedY;
-            if(this.cptFall > 40 && player.speedY != 0){
+            if(this.cptFall > 80 && player.speedY != 0){
                 player.setspeedY(0)
                 //console.log("y on stop climb : ", player.y)
             }
             if(player.animFinished){
-                player.switchEtat("sit", 40 - this.cptFall)
+                player.switchEtat("sit", 80 - this.cptFall)
             }
         },
         endFunc: function (player) {

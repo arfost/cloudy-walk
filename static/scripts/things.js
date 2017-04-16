@@ -66,7 +66,8 @@ class Coffre extends Thing {
         this.closed = this.sprite;
 
         this.opened = false;
-        this.boost = 0;
+        this.boost = false;
+        this.antiBoost = false;
     }
 
     switchState() {
@@ -99,8 +100,10 @@ class Coffre extends Thing {
             }
 
         if(this.boost){
-            this.pos.x = this.pos.x +1
-            this.boost --;
+            this.pos.x = this.pos.x +2.5
+        }
+        if(this.antiBoost){
+            this.pos.x = this.pos.x -2.5
         }
     }
 
