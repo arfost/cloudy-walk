@@ -370,13 +370,21 @@
 },
 "cloud_climb03.png":
 {
-	"frame": {"x":1756,"y":665,"w":110,"h":167},
+	"frame": {"x":1114,"y":727,"w":92,"h":173},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":110,"h":167},
-	"sourceSize": {"w":110,"h":167}
+	"spriteSourceSize": {"x":0,"y":0,"w":92,"h":173},
+	"sourceSize": {"w":92,"h":173}
 },
 "cloud_climb04.png":
+{
+	"frame": {"x":1260,"y":727,"w":100,"h":173},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":173},
+	"sourceSize": {"w":100,"h":173}
+},
+"cloud_climb05.png":
 {
 	"frame": {"x":1868,"y":665,"w":110,"h":167},
 	"rotated": false,
@@ -384,7 +392,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":110,"h":167},
 	"sourceSize": {"w":110,"h":167}
 },
-"cloud_climb05.png":
+"cloud_climb06.png":
 {
 	"frame": {"x":1877,"y":861,"w":117,"h":197},
 	"rotated": false,
@@ -392,7 +400,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":197},
 	"sourceSize": {"w":117,"h":197}
 },
-"cloud_climb06.png":
+"cloud_climb07.png":
 {
 	"frame": {"x":1888,"y":457,"w":126,"h":200},
 	"rotated": false,
@@ -477,7 +485,7 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "rebecharv2.png",
+	"image": "rebecharv3.png",
 	"format": "RGBA8888",
 	"size": {"w":1560,"h":1280},
 	"scale": "1",

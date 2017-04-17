@@ -40,8 +40,8 @@ class World {
         this.things = [];
 
         this.things.push(new Thing(stage, { x: -900, y: 25, zIndex: 3 }, 'arbre', { width: 227, height: 343 }))
-        this.things.push(new Colline(stage, { x: 1900, y: -20, zIndex: 3 }, 'colline', { width: 335, height: 425 }))
-        this.things.push(new Coffre(stage, { x: -200, y: 220, zIndex: 3 }, 'coffre', { width: 155, height: 112 }))
+        this.things.push(new Colline(stage, { x: 1900, y: -20, zIndex: 3 }, 'colline', { width: 425, height: 425 }))
+        this.things.push(new Coffre(stage, { x: 155, y: 220, zIndex: 3 }, 'coffre', { width: 155, height: 112 }))
         this.things.push(new Nuage(stage, { x: -300, y: 50, zIndex: 1 }, 'nuage', { width: 130, height: 95 }))
 
         this.camPos = {

@@ -256,10 +256,20 @@ function initMainChar() {
     }
     cloudClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + 2 + '.png'));
     cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
-    cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
-    cloudClimb.push(PIXI.Texture.fromFrame('getup0' + 3 + '.png'));
     var mountClimb = [];
-    for (var i = 3; i <= 6; i++) {
+    for (var i = 3; i <= 5; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        mountClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
+    }
+    for (var i = 3; i <= 5; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        mountClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
+    }
+    for (var i = 3; i <= 5; i++) {
+        // magically works since the spritesheet was loaded with the pixi loader
+        mountClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
+    }
+    for (var i = 6; i <= 7; i++) {
         // magically works since the spritesheet was loaded with the pixi loader
         mountClimb.push(PIXI.Texture.fromFrame('cloud_climb0' + i + '.png'));
     }
@@ -679,16 +689,17 @@ function initMainChar() {
         animParam: {
             width: 95,
             height: 220,
-            speed: 0.03
+            speed: 0.12
         },
         priority: 4,
         startFunc: function (player) {
-            player.setspeedY(-1.5)
-            player.setspeedX(0.3)
-            player.x += 60;
+            player.setspeedY(-2)
+            player.setspeedX(1)
+            player.x += 70;
+            player.y += 40;
         },
         runFunc: function (player, effets, param) {
-            if(player.animation.currentFrame == 2){
+            if(player.animation.currentFrame == 9){
                 player.setspeedX(1.5)
             }
             if(player.x > param.x +5){
@@ -728,7 +739,7 @@ function initMainChar() {
         },
         priority: 4,
         startFunc: function (player) {
-            player.setspeedY(-3)
+            player.setspeedY(-4)
             player.setspeedX(1)
         },
         runFunc: function (player, effets, param) {
