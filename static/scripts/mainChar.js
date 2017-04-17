@@ -59,8 +59,8 @@ class Entity {
         //console.log("pouet pouet frame state : ", this.animation._currentTime, this.animation.currentFrame, this.animation.totalFrames)
         
         this.etat.runFunc(this, charPos.effets, this.etat.param)
-        this.setScreenX((charPos.x - (camPos.x - camPos.boundaryX))*camPos.scale);
-        this.setScreenY((charPos.y - (camPos.y - camPos.boundaryY))*camPos.scale);
+        this.setScreenX((charPos.x - (camPos.x*camPos.scale - camPos.boundaryX)));
+        this.setScreenY((charPos.y - (camPos.y*camPos.scale - camPos.boundaryY)));
         //this.animation.scale.x = camPos.scale;
         //this.animation.scale.y = camPos.scale;
 
@@ -620,7 +620,7 @@ function initMainChar() {
         },
         runFunc: function (player) {
             //console.log("sit cptFall run", this.cptFall, player.speedY)
-            if (player.y >= 300 && (player.speedY != 0 || player.speedX != 0)) {
+            if (player.y >= 290 && (player.speedY != 0 || player.speedX != 0)) {
                 player.setspeedY(0)
                 player.setspeedX(0)
                 //console.log("y on stop climb : ", player.y)
@@ -758,8 +758,6 @@ function initMainChar() {
         loop: false,
         removeOnFinish: true,
         animParam: {
-            width: 115,
-            height: 230,
             speed: 0.05
         },
         priority: 5,

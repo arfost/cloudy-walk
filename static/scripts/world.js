@@ -101,9 +101,7 @@ class World {
         charAttitude.effets = []
         charAttitude.etats = []
         //console.log("charAttitude : ", charAttitude)
-        for (var layer of this.layers) {
-            layer.play(this.camPos);
-        }
+        
 
         if (this.locked) {
 
@@ -152,9 +150,21 @@ class World {
                 this.camPos.deltaX = this.camPos.vitesse;
             }
         }
+        if(this.camPos.zoom.isDown){
+            //this.camPos.scale += 0.01;
+            //this.camPos.boundaryX += (this.camPos.boundaryX/100) 
+        }
+        if(this.camPos.dezoom.isDown){
+            //this.camPos.scale += -0.01;
+            //this.camPos.boundaryX += -(this.camPos.boundaryX/100) 
+        }
+        for (var layer of this.layers) {
+            layer.play(this.camPos);
+        }
         for (var thing of this.things) {
             thing.play(this.camPos, charAttitude);
         }
+        
         var charPos = {
             x: charAttitude.x + charAttitude.speedX,
             y: charAttitude.y + charAttitude.speedY,
@@ -171,6 +181,7 @@ class Layer {
         var tile = new PIXI.extras.TilingSprite(texture, position.x, position.y);
         tile.position.x = position.posX;
         tile.position.y = position.posY;
+        this.position = position;
         tile.tilePosition.x = 2500;
         tile.tilePosition.y = 0;
         tile.zIndex = position.zIndex;
@@ -182,5 +193,9 @@ class Layer {
     play(camPos) {
         this.tile.tilePosition.x -= (camPos.deltaX * this.offset)
         this.tile.position.y -= (camPos.deltaY * this.offset)
+        //this.tile.scale.x = camPos.scale * this.offset
+        //this.tile.scale.y = camPos.scale * this.offset
+        //this.tile.position.x = camPos.scale * this.position.posX
+        //this.tile.position.y = camPos.scale * this.position.posY
     }
 }

@@ -19,16 +19,16 @@ class Thing {
             ((camPos.y - camPos.boundaryY) < this.pos.y + this.sprite.height && (camPos.y + camPos.boundaryY) > this.pos.y)) {
             if (!this.isAdded) {
                 this._addSelf(camPos)
-                this.sprite.x = (this.pos.x - (camPos.x - camPos.boundaryX))*camPos.scale
-                this.sprite.y = (this.pos.y - (camPos.y - camPos.boundaryY))*camPos.scale
+                this.sprite.x = (this.pos.x - (camPos.x - camPos.boundaryX))
+                this.sprite.y = (this.pos.y - (camPos.y - camPos.boundaryY))
             } else {
 
                 this.turn(camPos, charAttitude);
 
                 this.sprite.x = this.pos.x - (camPos.x - camPos.boundaryX)
                 this.sprite.y = this.pos.y - (camPos.y - camPos.boundaryY)
-                this.sprite.scale.x = camPos.scale * this.offsetWidth;
-                this.sprite.scale.y = camPos.scale * this.offsetHeight;
+                //this.sprite.scale.x = camPos.scale * this.offsetWidth;
+                //this.sprite.scale.y = camPos.scale * this.offsetHeight;
             }
         } else {
             if (this.isAdded) {
